@@ -4,104 +4,112 @@ using UnityEngine;
 
 public class PlayerInputManager : MonoBehaviour
 {
-    //This player input manager serves this simulation as a newbish game manager and input manager
-    //It can be split and improved in the future.
+    //This player input manager tries to add an extra layer between character movement and player input.
 
     private PlayerController playerController;
-    private bool statePlaying = true; //Fake state machine.
-    private bool statePause = false;
 
-    private float x;
-    private float y;
-    private float z;
+    private bool PLAYING_STATE = true; //Fake state machine.
+    private bool PAUSE_STATE = false;
 
     private Vector3 defaultForce;
 
-    private float inputPower = 1.0f;       //input power
-
-    public bool boostPickedUp;             //This is to let booster, boost.
-    private float boostDisplayTime;
+    [SerializeField]
+    private float movementSpeed = 10.0f;          
     
-    private float gameStartMessagesTimer = 32f;
-    private bool isTutorialActive = true;
+    [SerializeField]
+    private float default_Y = -5.0f;
+    
+    // W.I.P.
+    //private float inputPower = 1.0f;       
+    //public bool boostPickedUp;             //This is to let booster, boost.
+    //private float boostDisplayTime;   
+    //private float gameStartMessagesTimer = 32f;
+    //private bool isTutorialActive = true;
+    //private bool cheatSpeedMultiplier = false;
 
     void Start ()
     {
         //setting up refs
-        this.playerController = this.GetComponent<PlayerController>();
+        //this.playerController = this.GetComponent<PlayerController>();
+        this.playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        Debug.Log("Found " + playerController.ToString());
+
         this.defaultForce = Vector3.zero;  //(0,0,0)
+        this.defaultForce.y = default_Y;   //(0,-5,0)
   	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    void FixedUpdate()
     {
-        if (statePlaying)     
+        if (PLAYING_STATE)
         {
-            x = 0.0f;                   //Always resetting the inputs
+            Movement();  // Checks and operates commands related to player movement.
 
-            if (Input.GetKey(KeyCode.A))
-            {
-                x -= inputPower;
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                x += inputPower;
-            }
+            Options();
 
-            z = 0.0f;
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                z -= inputPower;
-            }
-            if (Input.GetKey(KeyCode.W))
-            {
-                z += inputPower;
-                Debug.Log("Trying to GO FORWARD");
-
-            }
-
-            y = 0.0f;
-
-            if (Input.GetKey(KeyCode.Space))
-            {
-                y += inputPower;
-                Debug.Log("Trying to Jump");
-            }
-
-            if (boostPickedUp)                       //If the boost is picked up
-            {
-                boostDisplayTime = 2f;                    //... set the display timer to 3 seconds so OnGui message works
-
-                if (Input.GetKey(KeyCode.LeftShift))      
-                {
-                    playerController.Boost();
-                    boostPickedUp = false;
-                }
-            }
-
-            var forceInput = new Vector3(x, y, z);
-
-            if (forceInput != defaultForce)         // ...checking if it's null
-            {
-                //Debug.Log("Sent force " + forceInput);
-                playerController.Move(forceInput);  // ...and sending it to player.
-            }
-
+            //Abilities();
+            //Interractions();
+        }
+        else if (PAUSE_STATE) // NOT IMPLEMENTED YET
+        {
             if (Input.GetKey(KeyCode.Escape))
             {
                 QuitGame();
             }
-        }
-        if (statePause)
+        }        
+    }
+
+    Vector2 GetInput()
+    {
+        return new Vector2 //making vector2 
         {
-            //Not Implemented
-            //Sleep rigidbodies
-            if (Input.GetKey(KeyCode.Escape))
-            {
-                QuitGame();
-            }
+            x = Input.GetAxis("Vertical") * movementSpeed,
+            y = Input.GetAxis("Horizontal") * movementSpeed
+        };
+    }
+    
+    public void Movement ()
+    {
+        Vector3 forceInput = new Vector3(GetInput().y, default_Y, GetInput().x);  //we make certain this value runs only for this method.
+
+         //default_Y = -5.0f; //Jimmos' safety on jump
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+              if (playerController.IsGrounded())
+              {
+                playerController.Jump(forceInput);
+                //default_Y += jump_Y;
+              }
+        }                        
+
+        if (Input.GetKey(KeyCode.LeftShift)) 
+        {
+            playerController.Sprint();      //enables the sprint factor on P.C. script.
+            //TODO: stamina drain ?
         }
+
+        if (forceInput != defaultForce)         // ...checking if input is null
+        {
+            playerController.Move(forceInput);  // ...and sending it to player.
+            //Debug.Log("Sending " + forceInput);
+        }
+    }
+
+    public void Options()             
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            QuitGame(); // Later version will have a way to pause instead of quit.
+        }
+    }
+    
+    void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
     }
 
     //public void OnGUI()
@@ -140,13 +148,4 @@ public class PlayerInputManager : MonoBehaviour
     //        boostDisplayTime -= Time.deltaTime;
     //    }
     //}
-
-    void QuitGame()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-                Application.Quit();
-#endif
-    }
 }
