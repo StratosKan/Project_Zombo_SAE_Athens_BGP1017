@@ -2,75 +2,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))] //safety first 
+
 public class PlayerController : MonoBehaviour
 {
+    // ****************************************************************************************
+    // ***************** This PC is based on Jimmos' PlayerControllerScript *******************
+    // ** It tries to remove player input from player object for more customization options. **
+    // ****************************************************************************************
+
     private Rigidbody rb;
 
-    //The actual force we apply to the rigidbody
-    [SerializeField]
-    private float xForce = 50.0f;                  
-    [SerializeField]
-    private float zForce = 50.0f;
-    [SerializeField]
-    private float yForce = 500.0f;
-
     private bool isGrounded;
-    private string whatIsGround = "Floor";
 
-    private bool boosted;
+    private string whatIsGround = "Floor";   //Every floor has the same tag - can be removed
+
     [SerializeField]
-    private float boosterTimer = 15f;
+    private float sprint_Multiplier = 1.0f;
+    [SerializeField]
+    private float sprint_Multiplier_Active = 2.0f;
+    [SerializeField]
+    private float gameplay_Factor = 0.7f;      //thi
 
-	private void Start ()
+    private void Start()
     {
         this.rb = this.GetComponent<Rigidbody>();
-	}
-	
-	private void Update ()
-    {
-        BoostManager();
-	}
-
-    void InputMove()
-    {
-        //this.rb.AddForce(force);
     }
 
-    public void Move(Vector3 force)                                                   // Receiving forces in a Vector3 with 
+    public void Move(Vector3 playerInputForce)                                // Receiving forces in a Vector3
     {
-        if (isGrounded)                                                               // Applying force only when user is grounded...
-        {
-            this.rb.AddForce(force.x * xForce, force.y * yForce, force.z * zForce);   //
-        }
+            Vector3 momentum = playerInputForce;
+            momentum = this.transform.rotation * momentum;
+            rb.velocity = momentum * sprint_Multiplier * gameplay_Factor;
+            sprint_Multiplier = 1.0f;           
     }
-    private void BoostManager()
+    public void Jump(Vector3 playerInputForce)
     {
-        if (boosted)                            //If player is boosted
-        {
-            if (boosterTimer > 0)               //... start timer
-            {
-                boosterTimer -= Time.deltaTime; 
-            }
-            else                               //...and when it goes to 0
-            {
-                xForce = xForce / 2; 
-                zForce = zForce / 2;
-                yForce = yForce / 2;
+        Vector3 momentum = this.transform.rotation * new Vector3(playerInputForce.x * 2, 15, playerInputForce.z * 2);
+        this.rb.velocity = momentum;
 
-                boosted = false;               //...revert the boost
-            }
-        }
+        //this.rb.AddForce(0, 1000, 0, ForceMode.Acceleration);
+    }
+    public void Sprint()
+    {
+        sprint_Multiplier = sprint_Multiplier_Active;
+    }
+    public bool IsGrounded()
+    {
+        return isGrounded;
+        //TODO: get; set;        
     }
 
-    public void Boost()
-    {
-        xForce = xForce * 2;
-        zForce = zForce * 2;
-        yForce = yForce * 2;
-
-        boosted = true;
-    }
-    
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag(whatIsGround))  //If the other gameObject the player hit isn't ground...
@@ -79,6 +61,7 @@ public class PlayerController : MonoBehaviour
             isGrounded = true;
         }
     }
+
     private void OnCollisionExit(Collision other)
     {
         if (other.gameObject.CompareTag(whatIsGround))  //If the other gameObject the player hit isn't ground...
@@ -88,3 +71,5 @@ public class PlayerController : MonoBehaviour
         }
     }
 }
+    
+
