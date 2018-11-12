@@ -6,7 +6,7 @@ public class InteractiveTargetScript : MonoBehaviour
 {
     //Add this script to an object you want to take damage
 
-    public float health = 20f;
+    public float health = 60f;
 
     //TEMP
     private Renderer tempMatHealth;
