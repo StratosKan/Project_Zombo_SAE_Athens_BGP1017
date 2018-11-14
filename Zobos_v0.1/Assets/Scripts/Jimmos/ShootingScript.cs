@@ -20,12 +20,16 @@ public class ShootingScript : MonoBehaviour
     public GameObject hitVFX;
     public ParticleSystem tracerEffect;
     public float timeForVFXToDestroy = .1f;
+
     private RaycastHit hit;
     private InteractiveTargetScript target = null;
+    private InputManager input;
 
 
     void Awake()
     {
+        input = GameObject.FindGameObjectWithTag("Manager").GetComponent<InputManager>(); //Accessing the InputManager component
+
         if (useMainCamera)
         {
             playerCameraVector = Camera.main.transform;
@@ -42,14 +46,14 @@ public class ShootingScript : MonoBehaviour
         shouldFire = false;
         if (isGunSemiAuto)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (input.MouseFireDown)
             {
                 shouldFire = !shouldFire;
             }
         }
         else
         {
-            if (Input.GetMouseButton(0) && Time.time >= nextTimeToFire)
+            if (input.MouseFireHold && Time.time >= nextTimeToFire)
             {
                 shouldFire = !shouldFire;
                 nextTimeToFire = Time.time + 1f / rateOfFirePerSecond;
