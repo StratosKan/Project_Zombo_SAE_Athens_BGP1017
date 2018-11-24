@@ -2,68 +2,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
+//v1
 public class ZomboMovement : MonoBehaviour
 {
-    Transform target;
+    private Transform target; //player TODO: Aggro system on multiplayer
+    private RaycastHit hit;
+    private NavMeshHit navHit;
+    private NavMeshAgent agent;
 
-    RaycastHit hit;
-
-    NavMeshHit navHit;
-
-    NavMeshAgent agent;
-
-    public float fov = 120f; //field of view
-
-    public float viewDistance = 10f;
-
-    public float wanderRadius = 7.0f;
-
+    private float fov = 120f; //field of view
+    private float viewDistance = 10f;
+    private float wanderRadius = 7.0f;
     private Vector3 wanderPoint; //the wandering point our AI generates to wander arround and ACT like a zombo.
     
     private string playerTag = "Player";
-
-    private bool playerInRange = false;
+    //private bool playerInRange = false;
 
     private bool isAware = false;
-
-    private Renderer renderer; // for testing purposes
-
-
-    //private Transform dummyTargetTest; //for testing purposes
-
+    private Renderer zomboRenderer; // for testing purposes
+    
     void Start ()
     {
         //setting up refs
 		if (target == null && GameObject.FindGameObjectWithTag(playerTag)) 
         {
-            target = GameObject.FindGameObjectWithTag(playerTag).transform;  //For optimization we can use Vector3 and get the .position.
+            target = GameObject.FindGameObjectWithTag(playerTag).transform;  //TODO: optimization so we can get Vector3 and get the .position.
         }
 
-        agent = this.GetComponent<NavMeshAgent>();
-
-        //myTargetTest = GameObject.Find("ZomboTargetTest").transform;
-
-        wanderPoint = RandomWanderPoint();
-
-        renderer = this.GetComponent<MeshRenderer>();
+        this.agent = this.GetComponent<NavMeshAgent>();
+        this.wanderPoint = RandomWanderPoint();
+        this.zomboRenderer = this.GetComponent<MeshRenderer>();
 	}
 	
 	void Update ()
     {
         if (isAware)
         {
+            //TODO: Distance checker agent.stoppingDistance = 1;
             this.agent.SetDestination(target.position);
-            renderer.material.color = Color.yellow;
+            //TODO: Chase, Attack(coroutine)
+            //TODO: roadRage = navAgent.acceleration = xxx;
+            //TODO: Evasive maneuvers
+            
+            zomboRenderer.material.color = Color.yellow;
         }
         else
         {
             //this.agent.SetDestination(dummyTargetTest.position);
             SearchForPlayer();
             Wander();
-            renderer.material.color = Color.blue;
+            zomboRenderer.material.color = Color.blue;
         }
-
 	}
 
     public void OnAware()          //This can and will also be handled by AI Manager in later version.
@@ -102,13 +91,13 @@ public class ZomboMovement : MonoBehaviour
         }
     }
 
-    public Vector3 RandomWanderPoint() //TODO: comments , optimization
+    public Vector3 RandomWanderPoint() //TODO: optimization.
     {
-        Vector3 randomPoint = (Random.insideUnitSphere * wanderRadius) + transform.position;
+        Vector3 randomPoint = (Random.insideUnitSphere * wanderRadius) + transform.position; //Creates a random point in wanderRadius
 
-        NavMesh.SamplePosition(randomPoint, out navHit, wanderRadius, -1);
+        NavMesh.SamplePosition(randomPoint, out navHit, wanderRadius, -1);                  //...then returns a hit on nav mesh (Careful with nav mesh on other floors)
 
-        return new Vector3(navHit.position.x, this.transform.position.y, navHit.position.z);
+        return new Vector3(navHit.position.x, this.transform.position.y, navHit.position.z); //... and finally sends back the wanderPoint vector.
     }
 
 
