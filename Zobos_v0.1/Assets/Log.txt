@@ -1,0 +1,8 @@
+BEGIN OF LOG, STARDATE -304129.24632166413, LogShip Zombo:
+====== Log ======
+14-11-18 - Jim P
+Time: n/a
+Added: Current scene based on Themis' scene, has functional Player <Player_CC3> with working CharacterControlled movement. InputManager on <Mothership>
+	controls input for playerMovementScript, cameraLookScript, shootingScript.
+Todo: Better shooting( raycast change, weapon swap, (weapon pickup?), weapon aim, weapon spread, dynamic weapon sway ).
+=================

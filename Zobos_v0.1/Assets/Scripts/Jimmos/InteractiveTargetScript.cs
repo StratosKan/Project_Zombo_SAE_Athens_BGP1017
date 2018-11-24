@@ -6,7 +6,13 @@ public class InteractiveTargetScript : MonoBehaviour
 {
     //Add this script to an object you want to take damage
 
-    public float health = 60f;
+    private float health = 100f;
+
+    //v2
+    private string enemyTag = "Enemy";
+    private ZomboHealth zomboHealth;
+    private int bodyPart; // 1 for body, 2 for head
+
 
     //TEMP
     private Renderer tempMatHealth;
@@ -17,6 +23,17 @@ public class InteractiveTargetScript : MonoBehaviour
     {
         //TEMP
         ProtoHealth();
+
+        if (this.CompareTag(enemyTag) && this.transform.name == "Head")
+        {
+            this.zomboHealth = this.transform.root.GetComponent<ZomboHealth>(); 
+            this.bodyPart = 2;
+        }
+        else if (this.CompareTag(enemyTag))  //checking if attached gameObject is a Zombo and then ref.
+        {
+            this.zomboHealth = this.GetComponent<ZomboHealth>();
+            this.bodyPart = 1;
+        }
     }
 
     private void ProtoHealth()
@@ -26,19 +43,26 @@ public class InteractiveTargetScript : MonoBehaviour
         tempMatHealth.material.color = color;
     }
 
-    public void TakeDamage (float amount)
+    public void TakeDamage (float amount) 
     {
-        health -= amount;
-
-        //TEMP
-        color = new Color32((byte)(health), 0, 0, 255);
-        tempMatHealth.material.color = color;
-        //TEMP
-
-        if (health <= 0)
+        if (this.CompareTag(enemyTag))
         {
-            health = 0;
-            Die();
+            zomboHealth.ApplyDamage(amount,bodyPart);
+        }
+        else
+        {
+            health -= amount;
+
+            //TEMP
+            color = new Color32((byte)(health), 0, 0, 255);
+            tempMatHealth.material.color = color;
+            //TEMP
+
+            if (health <= 0)
+            {
+                health = 0;
+                Die();
+            }
         }
     }
 
