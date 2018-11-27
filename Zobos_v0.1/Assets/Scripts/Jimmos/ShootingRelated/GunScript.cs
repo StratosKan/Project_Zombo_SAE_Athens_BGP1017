@@ -50,8 +50,8 @@ public class GunScript : MonoBehaviour
 
     [Header("SFX Properties")]
     public AudioClip fireSFX;
-    private AudioSource fireSFXObject;
-    public AudioClip hitSFX;
+    private AudioSource fireSFXObject; //  Jimmo i put these on comments in case you or someone else need them, the whole SFX section is gonna be through
+    public AudioClip hitSFX;           //   the sound manager....hopefully.
     public GameObject hitSFXPrefab;
     public float hitSFXToDestroyTime = 1f;
 
@@ -89,7 +89,7 @@ public class GunScript : MonoBehaviour
             defaultGunPosition = gunDepth;
         }
 
-        fireSFXObject = GetComponent<AudioSource>();
+        //fireSFXObject = GetComponent<AudioSource>();
         input = GameObject.FindGameObjectWithTag("Manager").GetComponent<InputManager>();
         playerObject = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         cameraObject = Camera.main.gameObject;
@@ -152,7 +152,18 @@ public class GunScript : MonoBehaviour
                 CreateVFX(hit);
             }
             // Handles SFX
-            CreateSFX();
+            SoundManager.instance.PlayShoot(fireSFX);
+            if (hit.collider)
+            {
+                GameObject instantiatedAudioSource = Instantiate(hitSFXPrefab, hit.point, Quaternion.identity);
+                instantiatedAudioSource.transform.SetParent(hit.transform, true);
+                
+                SoundManager.instance.PlayHit(hitSFX);
+                Destroy(instantiatedAudioSource, hitSFXToDestroyTime);
+
+            }
+            
+            //CreateSFX();
         }
     }
 
@@ -243,8 +254,8 @@ public class GunScript : MonoBehaviour
             Destroy(instantiatedTexture, hitVFXToDestroyTime);
         }
     }
-
-    private void CreateSFX()
+    //THIS PART IS FUNCTIONING THROUGH THE SOUND MANAGER 
+   /* private void CreateSFX()
     {
         if (fireSFX != null)
         {
@@ -262,5 +273,5 @@ public class GunScript : MonoBehaviour
                 Destroy(instantiatedAudioSource, hitSFXToDestroyTime);
             }
         }
-    }
+    } */
 }
