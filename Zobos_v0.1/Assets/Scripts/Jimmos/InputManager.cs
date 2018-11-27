@@ -16,11 +16,13 @@ public class InputManager : MonoBehaviour
     public bool MouseFireDown { get; private set; }
     public bool MouseFireHold { get; private set; }
     public bool MouseAimDown { get; private set; }
+    public bool MouseAimHold { get; private set; }
 
 
     //This guy controls all, also should probably make these an enumarator and use switch/case
     private bool PLAYING_STATE = true; //Fake state machine.
     private bool PAUSE_STATE = false;
+    public bool TO_EXIT_ON_ESC = false;
 
     private void Update()
     {
@@ -37,6 +39,7 @@ public class InputManager : MonoBehaviour
             MouseFireDown = Input.GetMouseButtonDown(0);
             MouseFireHold = Input.GetMouseButton(0);
             MouseAimDown = Input.GetMouseButtonDown(1);
+            MouseAimHold = Input.GetMouseButton(1);
         }
         else if (PAUSE_STATE)
         {
@@ -51,7 +54,7 @@ public class InputManager : MonoBehaviour
 
     public void Options()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape) && TO_EXIT_ON_ESC)
         {
             QuitGame(); // Later version will have a way to pause instead of quit.
         }

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/PrototypeF01-Themis.unity
+- path: Assets/Scenes/PrototypeF01-Themis Latest Merged.unity
   isLoaded: 1
   isActive: 1
