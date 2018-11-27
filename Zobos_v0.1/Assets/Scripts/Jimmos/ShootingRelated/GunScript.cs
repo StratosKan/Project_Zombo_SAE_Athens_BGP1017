@@ -154,12 +154,13 @@ public class GunScript : MonoBehaviour
             // Handles SFX
             SoundManager.instance.PlayShoot(fireSFX);
             if (hit.collider)
-            {
-                GameObject instantiatedAudioSource = Instantiate(hitSFXPrefab, hit.point, Quaternion.identity);
-                instantiatedAudioSource.transform.SetParent(hit.transform, true);
+           {
+               GameObject instantiatedAudioSource = Instantiate(hitSFXPrefab, hit.point, Quaternion.identity);
+               instantiatedAudioSource.transform.SetParent(hit.transform, true);
                 
                 SoundManager.instance.PlayHit(hitSFX);
                 Destroy(instantiatedAudioSource, hitSFXToDestroyTime);
+               
 
             }
             

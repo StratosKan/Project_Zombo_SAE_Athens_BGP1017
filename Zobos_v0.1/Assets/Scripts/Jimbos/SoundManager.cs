@@ -6,9 +6,8 @@ public class SoundManager : MonoBehaviour
 {
     private AudioSource ShootSFX;
     private AudioSource HitSFX;
-    public GameObject hitSFXPrefab;
-    public float hitSFXToDestroyTime = 1f;
-    private RaycastHit hit;
+   
+    private GameObject whereithits;
 
 
     public AudioSource Music; //this will remain blank for a while
@@ -20,10 +19,11 @@ public class SoundManager : MonoBehaviour
         if(instance == null)
         {
             instance = this;
-            
+            //whereithits = GameObject.Find("AudioSource_Gunhit_1(Clone)");
+           
 
         }
-        
+
 
 
         //DontDestroyOnLoad(gameObject); // Thats to secure that it's not gonna be destoyed at everytime we reload the scene
@@ -42,12 +42,22 @@ public class SoundManager : MonoBehaviour
 
     public void PlayHit (AudioClip clip)
     {
-        HitSFX = GameObject.FindGameObjectWithTag("Gun").GetComponent<AudioSource>();
-        //GameObject instantiatedAudioSource = Instantiate(hitSFXPrefab, hit.point, Quaternion.identity);
-       // instantiatedAudioSource.transform.SetParent(hit.transform, true);
-        HitSFX.clip = clip;
-        HitSFX.PlayOneShot(clip, 3f);
-        // Destroy(instantiatedAudioSource, hitSFXToDestroyTime);
+        
+            Debug.Log("IT HIT");
+        
+
+
+        
+        whereithits = GameObject.Find("AudioSource_Gunhit_1(Clone)");
+
+        HitSFX = whereithits.GetComponent<AudioSource>();
+
+
+
+            HitSFX.clip = clip;
+            HitSFX.PlayOneShot(clip);
+            // Destroy(instantiatedAudioSource, hitSFXToDestroyTime);
+        
 
 
 

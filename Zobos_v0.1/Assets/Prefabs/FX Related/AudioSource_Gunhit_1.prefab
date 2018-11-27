@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4503209780158676}
   - component: {fileID: 82952674823424266}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AudioSource_Gunhit_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,15 +49,15 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_audioClip: {fileID: 8300000, guid: 3476bbaae7cce23479e2d186c3ee4a2a, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 20
