@@ -16,10 +16,14 @@ public class HeadbobScript : MonoBehaviour
     private float targetBobAmount;
 
     private InputManager input;
+    private Stats_Manager stats;
+    private PlayerMovementScript playerMovement;
 
     void Awake()
     {
         input = GameObject.FindGameObjectWithTag("Manager").GetComponent<InputManager>();
+        stats = GameObject.FindGameObjectWithTag("Manager").GetComponent<Stats_Manager>();
+        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovementScript>();
         headpos = transform.localPosition;
         midpointY = transform.localPosition.y;
         midpointX = transform.localPosition.x;
@@ -27,54 +31,56 @@ public class HeadbobScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (input.MouseAimHold)
+        if (playerMovement.isPlayerGrounded())
         {
-            targetBobAmount = bobbingAmountAimed;
-        }
-        else
-        {
-            targetBobAmount = bobbingAmountDefault;
-        }
-
-        float waveslice = 0.0f;
-        float horizontal = input.Horizontal;
-        float vertical = input.Vertical;
-
-
-        if (Mathf.Abs(horizontal) == 0 && Mathf.Abs(vertical) == 0)
-        {
-            timer = 0.0f;
-        }
-        else
-        {
-            waveslice = Mathf.Sin(timer);
-            if (input.IsRunning)
+            if (input.MouseAimHold)
             {
-                timer = timer + bobbingSpeedRun;
+                targetBobAmount = bobbingAmountAimed;
             }
             else
             {
-                timer = timer + bobbingSpeedWalk;
+                targetBobAmount = bobbingAmountDefault;
             }
-            if (timer > Mathf.PI * 2)
+
+            float waveslice = 0.0f;
+            float horizontal = input.Horizontal;
+            float vertical = input.Vertical;
+
+            if (Mathf.Abs(horizontal) == 0 && Mathf.Abs(vertical) == 0)
             {
-                timer = timer - (Mathf.PI * 2);
+                timer = 0.0f;
             }
-        }
-        if (waveslice != 0)
-        {
-            float translateChange = waveslice * targetBobAmount;
-            float totalAxes = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
-            totalAxes = Mathf.Clamp(totalAxes, -1.0f, 1.0f);
-            translateChange = totalAxes * translateChange;
-            headpos.y = midpointY + translateChange;
-            headpos.x = midpointX + translateChange;
-        }
-        else
-        {
-            Mathf.Lerp(headpos.y, midpointY, 1f);
-            Mathf.Lerp(headpos.x, -midpointX, 1f);
-        }
-        transform.localPosition = headpos;
+            else
+            {
+                waveslice = Mathf.Sin(timer);
+                if (input.IsRunning && stats.GetPlayerStamina() > 0f)
+                {
+                    timer = timer + bobbingSpeedRun;
+                }
+                else
+                {
+                    timer = timer + bobbingSpeedWalk;
+                }
+                if (timer > Mathf.PI * 2)
+                {
+                    timer = timer - (Mathf.PI * 2);
+                }
+            }
+            if (waveslice != 0)
+            {
+                float translateChange = waveslice * targetBobAmount;
+                float totalAxes = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
+                totalAxes = Mathf.Clamp(totalAxes, -1.0f, 1.0f);
+                translateChange = totalAxes * translateChange;
+                headpos.y = midpointY + translateChange;
+                headpos.x = midpointX + translateChange;
+            }
+            else
+            {
+                Mathf.Lerp(headpos.y, midpointY, 1f);
+                Mathf.Lerp(headpos.x, -midpointX, 1f);
+            }
+            transform.localPosition = headpos;
+        }   
     }
 }

@@ -87,7 +87,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void CheckRunInput()      //TODO: FIX HEADBOB JIM TY
+    public void CheckRunInput()
     {
         timeSinceLastStaminaDrain -= Time.deltaTime;
 

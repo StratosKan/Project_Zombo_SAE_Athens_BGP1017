@@ -82,4 +82,9 @@ public class PlayerMovementScript : MonoBehaviour
             moveDirection *= walkSpeed;
         }
     }
+
+    public bool isPlayerGrounded()
+    {
+        return cController.isGrounded;
+    }
 }

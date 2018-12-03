@@ -72,8 +72,10 @@ public class InputManager : MonoBehaviour
             {
                 Resume();
             }
-
-            else { Pause(); }
+            else
+            {
+                Pause();
+            }
         }
     }
 
@@ -83,7 +85,7 @@ public class InputManager : MonoBehaviour
         pausemenuUI.enabled = false;
         GameIsPaused = false;
         Cursor.lockState = CursorLockMode.Locked; //COMMENT FOR FELLOW COWORKERS : ASSUMING ALL CODE RUNS ON FINAL BUILD IN AN EXECUTABLE , REATTAINING FOCUS IN THE GAME WINDOW IS MOST LIKELY SUPERFLUOUS
-        Cursor.visible = false;
+        Cursor.visible = false; // Jimmos comment - this doesn't work when pressing escape again when pause menu is up because escape is the key the unlocks the cursor in the first place
     }
 
     void Pause() //Might need tweaking , feed not cutting off instantly (hopefully they won't notice). Most noticable when pausing during mouse swipes. <Might not happen in Build version>
