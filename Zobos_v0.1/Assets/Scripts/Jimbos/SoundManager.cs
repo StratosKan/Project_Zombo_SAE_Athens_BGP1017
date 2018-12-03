@@ -43,7 +43,7 @@ public class SoundManager : MonoBehaviour
     public void PlayHit (AudioClip clip)
     {
         
-            Debug.Log("IT HIT");
+            //Debug.Log("IT HIT");
         
 
 

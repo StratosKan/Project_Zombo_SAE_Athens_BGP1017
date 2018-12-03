@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+//v2
 [RequireComponent(typeof(CharacterController))] //safety first 
 
 public class PlayerMovementScript : MonoBehaviour
@@ -12,6 +12,8 @@ public class PlayerMovementScript : MonoBehaviour
 
     private Vector3 moveDirection;
     private Vector3 targetDirection;
+
+    public bool playerShouldRun = false;   
 
     private CharacterController cController;
     private InputManager input;
@@ -71,7 +73,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     public void Sprint()
     {
-        if (input.IsRunning)
+        if (playerShouldRun) //TODO: Check if responsive enough.
         {
             moveDirection *= runSpeed;
         }

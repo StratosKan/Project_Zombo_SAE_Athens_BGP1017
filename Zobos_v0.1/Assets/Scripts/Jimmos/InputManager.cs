@@ -7,7 +7,7 @@ public class InputManager : MonoBehaviour
     //This player input manager tries to add an extra layer between character movement and player input.
     public bool IsRunning { get; private set; }
     public bool Jump { get; private set; }
-    
+    public bool StimpackUse { get; private set; }    
 
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
     public Canvas statsUI;
     public static bool GameIsPaused = false;
 
-    //This guy controls all, also should probably make these an enumarator and use switch/case
+    //This guy controls all, also should probably make these an enumerator and use switch/case
 
     private void Awake()
     {
@@ -39,7 +39,7 @@ public class InputManager : MonoBehaviour
 
             Jump = Input.GetKey(KeyCode.Space);
             IsRunning = Input.GetKey(KeyCode.LeftShift);
-            
+            StimpackUse = Input.GetKey(KeyCode.X); 
 
             MouseX = Input.GetAxis("Mouse X");
             MouseY = Input.GetAxis("Mouse Y");
