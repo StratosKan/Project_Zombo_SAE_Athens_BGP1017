@@ -26,7 +26,7 @@ public class InteractiveTargetScript : MonoBehaviour
 
         if (this.CompareTag(enemyTag) && this.transform.name == "Head")
         {
-            this.zomboHealth = this.transform.root.GetComponent<ZomboHealth>(); 
+            this.zomboHealth = this.transform.parent.GetComponent<ZomboHealth>(); 
             this.bodyPart = 2;
         }
         else if (this.CompareTag(enemyTag))  //checking if attached gameObject is a Zombo and then ref.

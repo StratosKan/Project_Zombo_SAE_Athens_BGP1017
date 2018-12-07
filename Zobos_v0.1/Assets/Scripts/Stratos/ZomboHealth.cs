@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(ZomboMovement))]
+[RequireComponent(typeof(ZomboAttack))]
 
 public class ZomboHealth : MonoBehaviour
 {
-    private float zomboHealth = 300;
+    private float zomboHealth = 100;
 
     private bool roidRage = false; //roidRage = berserk
 
@@ -17,13 +16,19 @@ public class ZomboHealth : MonoBehaviour
     private NavMeshAgent navAgent;
     private AI_Manager aiManager;
     private ZomboMovement zomboMov;
-
+    private ZomboAttack zomboAtk;
 
 	void Start ()
     {
         this.navAgent = this.GetComponent<NavMeshAgent>();
         this.zomboMov = this.GetComponent<ZomboMovement>();
+        this.zomboAtk = this.GetComponent<ZomboAttack>();
         this.aiManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<AI_Manager>();
+
+        if (aiManager == null)
+        {
+            Debug.Log("ERROR: Can't find AI manager. SOURCE: " + this.transform.name);
+        }
 	}
 
     public void ApplyDamage (float amount,int bodyPart) //TODO: add gunType (1 for AR, 2 for pistol and so on).
@@ -56,7 +61,8 @@ public class ZomboHealth : MonoBehaviour
             {
                 navAgent.acceleration = 10.0f;  //TODO: TESTS 
                 navAgent.speed = 4.0f;
-                //TODO: Attack speed ++
+                int i = 2;
+                zomboAtk.MultiplyZomboAtkSpeed(i);
             }
         }
         //if (bodyPart == 2)

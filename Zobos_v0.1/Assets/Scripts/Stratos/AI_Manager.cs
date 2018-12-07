@@ -29,7 +29,6 @@ public class AI_Manager : MonoBehaviour
     void Start ()
     {
         //TODO: Get stats_manager stats.
-        //TODO: Zombo prefab resources load.
 
         this.stats_manager = this.GetComponent<Stats_Manager>();
 
@@ -80,7 +79,6 @@ public class AI_Manager : MonoBehaviour
 
     public void ZomboSpawn (Vector3 spawnPoint) //maybe use Transform here but no need for now.
     {
-        Debug.Log("Spawning Zombo on: " + spawnPoint);
         Instantiate(zomboPrefab,spawnPoint,Quaternion.identity,dadOFZombos);
 
         zombosAlive++;

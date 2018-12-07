@@ -1,8 +1,65 @@
 BEGIN OF LOG, STARDATE -304129.24632166413, LogShip Zombo:
 ====== Log ======
+11-11-18 - Stratos K
+Time: 5h
+Added: Player Input Manager && Player Controler (using physics) based on Jimmos' playerControllerScript.
+=================
+12-11-18 - Stratos K
+Time: 2h
+Added: The first Zombo AI movement. It's only wandering arround and looking for player in this version.
+=================
 14-11-18 - Jim P
 Time: n/a
 Added: Current scene based on Themis' scene, has functional Player <Player_CC3> with working CharacterControlled movement. InputManager on <Mothership>
 	controls input for playerMovementScript, cameraLookScript, shootingScript.
 Todo: Better shooting( raycast change, weapon swap, (weapon pickup?), weapon aim, weapon spread, dynamic weapon sway ).
 =================
+24-11-18 - Stratos K
+Time: 18h
+Added: AI && Stats Managers v1 made from scratch, with attention to communication of these 2 system and the rest of the AI. Also, implemented major improvements on AI movement and created AI health script.
+Lastly, edited Jimmos' interactiveTargetScript to make it work properly with AI bodyparts (currently, head and body).
+=================
+27-11-18 - Jim P
+Time: ~40h
+Added: 
+>Better Shooting. 
+	- Weapon Aim, now can aim with right click, which changes weapon spread and camera FOV appropriately.
+	- Weapon Spread, depending on mode of firing (hip/aim), aim changes appropriately - currently not dynamic
+		(spread is either x or y, doesn't interpolate based on amount of time firing).
+	- Dynamic weapon sway, gun behavior was modified by adding a sense of weight to the gun.
+	- Weapon Recoil, firing for long periods of time, kicks back the gun and changes the camera angle.
+	- Weapon SFX, created input points for weapon sound effects both gun firing and bullet hitting objects.
+	- Headbob, copy/ pasted older script for some head movement, probably a placeholder!
+>Placeholder SFX.
+	- 2 available SFX for shooting from http://soundbible.com/tags-gun.html.
+	General scripts: CopyMainCameraFOVScript, syncs GunCamera with PlayerCamera
+	Unused scripts: BulletScript
+>Prefabs.
+	- AudioSource_Gunhit_1, is the prefab which handles the hitSFX sound, don't mess with it, just assign proper sound in GunScript.
+	Unused prefabs: Bullet
+Changed: 
+	- Better Crosshairs, now part of the IMGUI system, change pseudo-dynamicly with player actions (currently shooting).
+	- Raycast from gun was changed, now gun fires realistically from hip and aimed position*.
+	* EXPERIMENTAL OPTIONS for gun aim, Gun Script by default has enabled some options where the gun tries to always center itself to the middle
+		of the screen - relative to the object the user is currently aimed at. Feature is not at final state, feels glitchy and basicly weird but
+		it does do what should do at final state!
+	- Rifle model was changed abit.
+Todo: Finish up with Weapon Spread, Headbob, Gunbob, Even better Crosshairs, Fix Gun Aim to not be glitchy.
+================
+03-12-18 - Stratos K
+Time: 20h
+Added: -ZomboAttack
+       -PlayerHealth
+	   -UI location/stamina/health functionality through stats
+	   -Updated stats manager v2
+	   -Edited playerInput/playerMovement to work ''properly'' with player health.
+
+TODOs: Game manager (maybe with state machine(ifNeeded)), UI manager v1, stats manager update v3, Interface <GameEventListener>(); , maybe make AI manager handle all AI updates for more control.
+Also, maybe add triggers for AI on separate layer.
+================
+07-12-18 - Stratos K
+Time: 8h
+Added: - Interface GameEventListener
+       - GameStateMachine & IState (aborted and moved to unused). Need to re-evaluate purpose.
+	   - UI manager v1(and modified Stats manager to work accordingly)
+	   - Game Manager v1 (Very early version, works fine but interfaces not implemented on other systems yet.)

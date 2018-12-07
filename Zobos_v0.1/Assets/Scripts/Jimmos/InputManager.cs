@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
     //This player input manager tries to add an extra layer between character movement and player input.
     public bool IsRunning { get; private set; }
     public bool Jump { get; private set; }
+    public bool StimpackUse { get; private set; }    
 
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
@@ -16,53 +17,97 @@ public class InputManager : MonoBehaviour
     public bool MouseFireDown { get; private set; }
     public bool MouseFireHold { get; private set; }
     public bool MouseAimDown { get; private set; }
+    public bool MouseAimHold { get; private set; }
 
+    public Canvas pausemenuUI;
+    public Canvas statsUI;
+    public static bool GameIsPaused = false;
 
-    //This guy controls all, also should probably make these an enumarator and use switch/case
-    private bool PLAYING_STATE = true; //Fake state machine.
-    private bool PAUSE_STATE = false;
+    //This guy controls all, also should probably make these an enumerator and use switch/case
+
+    private void Awake()
+    {
+        Resume();
+    }
 
     private void Update()
     {
-        if (PLAYING_STATE)
+        if (!GameIsPaused)
         {
             Horizontal = Input.GetAxis("Horizontal");
             Vertical = Input.GetAxis("Vertical");
 
             Jump = Input.GetKey(KeyCode.Space);
             IsRunning = Input.GetKey(KeyCode.LeftShift);
+            StimpackUse = Input.GetKey(KeyCode.X); 
 
             MouseX = Input.GetAxis("Mouse X");
             MouseY = Input.GetAxis("Mouse Y");
             MouseFireDown = Input.GetMouseButtonDown(0);
             MouseFireHold = Input.GetMouseButton(0);
             MouseAimDown = Input.GetMouseButtonDown(1);
+            MouseAimHold = Input.GetMouseButton(1);
         }
-        else if (PAUSE_STATE)
+        else if (GameIsPaused)
         {
+
             Debug.Log("Am now set at Pause Menu");
         }
     }
 
+    
+
     private void LateUpdate()
     {
+        DisplayUsefulStats();
         Options();
     }
 
+    
     public void Options()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            QuitGame(); // Later version will have a way to pause instead of quit.
+            if (GameIsPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
         }
     }
 
-    void QuitGame()
+    public void Resume()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-                Application.Quit();
-#endif
+        Time.timeScale = 1;
+        pausemenuUI.enabled = false;
+        GameIsPaused = false;
+        Cursor.lockState = CursorLockMode.Locked; //COMMENT FOR FELLOW COWORKERS : ASSUMING ALL CODE RUNS ON FINAL BUILD IN AN EXECUTABLE , REATTAINING FOCUS IN THE GAME WINDOW IS MOST LIKELY SUPERFLUOUS
+        Cursor.visible = false; // Jimmos comment - this doesn't work when pressing escape again when pause menu is up because escape is the key the unlocks the cursor in the first place
     }
+
+    void Pause() //Might need tweaking , feed not cutting off instantly (hopefully they won't notice). Most noticable when pausing during mouse swipes. <Might not happen in Build version>
+    {
+        pausemenuUI.enabled = true;
+        Time.timeScale = 0;
+        GameIsPaused = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    void DisplayUsefulStats()
+    {
+        if (!GameIsPaused)
+        {
+            if (Input.GetKey(KeyCode.Tab))
+            {
+                statsUI.enabled = true;
+            }
+            else statsUI.enabled = false;
+        }
+    }
+
+    
 }

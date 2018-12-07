@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 114622504705109308}
   - component: {fileID: 114860888873998052}
   - component: {fileID: 195048812903362478}
+  - component: {fileID: 114242471550194850}
   m_Layer: 0
   m_Name: Zombo
   m_TagString: Enemy
@@ -185,6 +186,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f461560bab4cf8445891476bcdc105ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114242471550194850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1759736833320870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423c4cbda7a7fef4ba776065553ed873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114559720761515556

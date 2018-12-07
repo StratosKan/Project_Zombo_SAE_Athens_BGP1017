@@ -1,14 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
-//v1
+//v2
+[RequireComponent(typeof(ZomboAttack))]
 public class ZomboMovement : MonoBehaviour
 {
     private Transform target; //player TODO: Aggro system on multiplayer
     private RaycastHit hit;
     private NavMeshHit navHit;
     private NavMeshAgent agent;
+    private ZomboAttack zomboAtk;
 
     private float fov = 120f; //field of view
     private float viewDistance = 10f;
@@ -16,7 +16,10 @@ public class ZomboMovement : MonoBehaviour
     private Vector3 wanderPoint; //the wandering point our AI generates to wander arround and ACT like a zombo.
     
     private string playerTag = "Player";
-    //private bool playerInRange = false;
+    private bool playerInRange = false;
+    private float zomboAttackRange = 1.3f; //TODO: TESTS AND GAMEPLAY
+    private float zomboAttackSpeed = 0.7f;
+    private float zomboAttackTimer;
 
     private bool isAware = false;
     private Renderer zomboRenderer; // for testing purposes
@@ -32,18 +35,29 @@ public class ZomboMovement : MonoBehaviour
         this.agent = this.GetComponent<NavMeshAgent>();
         this.wanderPoint = RandomWanderPoint();
         this.zomboRenderer = this.GetComponent<MeshRenderer>();
+        this.zomboAtk = this.GetComponent<ZomboAttack>();
+
+        this.zomboAttackTimer = zomboAttackSpeed * 3; //x3 is gameplay factor.
 	}
 	
 	void Update ()
     {
         if (isAware)
         {
-            //TODO: Distance checker agent.stoppingDistance = 1;
-            this.agent.SetDestination(target.position);
-            //TODO: Chase, Attack(coroutine)
-            //TODO: roadRage = navAgent.acceleration = xxx;
-            //TODO: Evasive maneuvers
-            
+            Chase(target);
+            zomboAttackTimer -= Time.deltaTime; //todo: gameplay test if it should be inside playerInRange bool.
+
+            if (playerInRange)
+            {
+                if (zomboAttackTimer <= 0) //in this version attack speed is on playerMovement because update runs on zomboMovement.
+                {
+                    zomboAtk.Attack(target);
+                    zomboAttackTimer = zomboAttackSpeed;
+                }
+                playerInRange = false;
+            }
+
+            //TODO: Evasive maneuvers            
             zomboRenderer.material.color = Color.yellow;
         }
         else
@@ -55,6 +69,29 @@ public class ZomboMovement : MonoBehaviour
         }
 	}
 
+    public void Chase(Transform target)
+    {
+        this.agent.SetDestination(target.position);
+
+        float distance = (target.position - this.transform.position).magnitude;
+
+        if (distance <= zomboAttackRange)
+        {
+            playerInRange = true;
+        }
+        // :))))))))))) For science
+        //float distance = (target.position - this.transform.position).magnitude;
+        //float distance2 = Vector3.Distance(this.transform.position, target.position);
+        //if (distance == distance2)
+        //{
+        //    Debug.Log("SUCK IT");
+        //}
+        //else
+        //{
+        //    Debug.Log("magnitude " + distance);
+        //    Debug.Log("v3distance " + distance2);
+        //}
+    }
     public void OnAware()          //This can and will also be handled by AI Manager in later version.
     {
         isAware = true;
@@ -99,9 +136,6 @@ public class ZomboMovement : MonoBehaviour
 
         return new Vector3(navHit.position.x, this.transform.position.y, navHit.position.z); //... and finally sends back the wanderPoint vector.
     }
-
-
-
 
     //void OnNavMeshPreUpdate() // use for callbacks to encounter before nav mesh calcs.
 }
