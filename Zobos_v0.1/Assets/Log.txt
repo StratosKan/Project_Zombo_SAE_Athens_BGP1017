@@ -1,10 +1,23 @@
 BEGIN OF LOG, STARDATE -304129.24632166413, LogShip Zombo:
 ====== Log ======
+11-11-18 - Stratos K
+Time: 5h
+Added: Player Input Manager && Player Controler (using physics) based on Jimmos' playerControllerScript.
+=================
+12-11-18 - Stratos K
+Time: 2h
+Added: The first Zombo AI movement. It's only wandering arround and looking for player in this version.
+=================
 14-11-18 - Jim P
 Time: n/a
 Added: Current scene based on Themis' scene, has functional Player <Player_CC3> with working CharacterControlled movement. InputManager on <Mothership>
 	controls input for playerMovementScript, cameraLookScript, shootingScript.
 Todo: Better shooting( raycast change, weapon swap, (weapon pickup?), weapon aim, weapon spread, dynamic weapon sway ).
+=================
+24-11-18 - Stratos K
+Time: 18h
+Added: AI && Stats Managers v1 made from scratch, with attention to communication of these 2 system and the rest of the AI. Also, implemented major improvements on AI movement and created AI health script.
+Lastly, edited Jimmos' interactiveTargetScript to make it work properly with AI bodyparts (currently, head and body).
 =================
 27-11-18 - Jim P
 Time: ~40h
@@ -32,3 +45,21 @@ Changed:
 		it does do what should do at final state!
 	- Rifle model was changed abit.
 Todo: Finish up with Weapon Spread, Headbob, Gunbob, Even better Crosshairs, Fix Gun Aim to not be glitchy.
+================
+03-12-18 - Stratos K
+Time: 20h
+Added: -ZomboAttack
+       -PlayerHealth
+	   -UI location/stamina/health functionality through stats
+	   -Updated stats manager v2
+	   -Edited playerInput/playerMovement to work ''properly'' with player health.
+
+TODOs: Game manager (maybe with state machine(ifNeeded)), UI manager v1, stats manager update v3, Interface <GameEventListener>(); , maybe make AI manager handle all AI updates for more control.
+Also, maybe add triggers for AI on separate layer.
+================
+07-12-18 - Stratos K
+Time: 8h
+Added: - Interface GameEventListener
+       - GameStateMachine & IState (aborted and moved to unused). Need to re-evaluate purpose.
+	   - UI manager v1(and modified Stats manager to work accordingly)
+	   - Game Manager v1 (Very early version, works fine but interfaces not implemented on other systems yet.)
