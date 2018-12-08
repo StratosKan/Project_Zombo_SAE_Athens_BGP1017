@@ -63,3 +63,9 @@ Added: - Interface GameEventListener
        - GameStateMachine & IState (aborted and moved to unused). Need to re-evaluate purpose.
 	   - UI manager v1(and modified Stats manager to work accordingly)
 	   - Game Manager v1 (Very early version, works fine but interfaces not implemented on other systems yet.)
+================
+08-12-2018 Themis M
+Time: n/a
+Changed: 
+	- UI Ammo Bar got scrapped. Ammo counter created instead. Methods have been created to allow for proper display.
+ 

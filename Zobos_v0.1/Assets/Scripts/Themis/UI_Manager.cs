@@ -7,9 +7,15 @@ public class UI_Manager : MonoBehaviour,GameEventListener
     Slider healthSlider;
     Slider staminaSlider;
 
+    Text MagCapacityText;
+    Text BulletsInMagText;
+
     private string currentGameState;
     private int UI_Health;
     private float UI_Stamina;
+
+    private int MagCapacity;
+    private int BulletsInMag;
 
     private Stats_Manager statsManager;
 
@@ -24,6 +30,8 @@ public class UI_Manager : MonoBehaviour,GameEventListener
             this.currentGameState = statsManager.GetGameState();
             this.UI_Health = statsManager.GetPlayerHealth();
             this.UI_Stamina = statsManager.GetPlayerStamina();
+            this.MagCapacity = statsManager.GetMagSize();
+            this.BulletsInMag = statsManager.GetBulletsInMag();
             Debug.Log("UI BUGFIX" + currentGameState +" "+ UI_Stamina +" "+ UI_Health);
         }
         else
@@ -36,6 +44,10 @@ public class UI_Manager : MonoBehaviour,GameEventListener
         this.healthSlider.value = UI_Health;
         this.staminaSlider = GameObject.Find("Stamina").GetComponent<Slider>();
         this.staminaSlider.value = UI_Stamina;
+        this.BulletsInMagText = GameObject.Find("BulletsInMagText").GetComponent<Text>();
+        this.BulletsInMagText.text = BulletsInMag.ToString();
+        this.MagCapacityText = GameObject.Find("MagText").GetComponent<Text>();
+        this.MagCapacityText.text = MagCapacity.ToString();
     }
     public void UI_Update_Health(int newPlayerHealth)
     {
@@ -54,6 +66,46 @@ public class UI_Manager : MonoBehaviour,GameEventListener
             this.staminaSlider.value = UI_Stamina;
         }
     }
+
+    public void UI_Update_Ammo(int newMagCapacity , int newBulletsInMag)
+    {
+        if (MagCapacity != newMagCapacity && BulletsInMag!= newBulletsInMag)
+        {
+            MagCapacity = newMagCapacity;
+            this.MagCapacityText.text = MagCapacity.ToString();
+
+            BulletsInMag = newBulletsInMag;
+            this.BulletsInMagText.text = BulletsInMag.ToString();
+        }
+    }
+
+    public void UI_Update_BulletsInMag(int newBulletsInMag)
+    {
+        if (BulletsInMag!= newBulletsInMag)
+        {
+            if (BulletsInMag <= 10)
+            {
+                BulletsInMagText.color = Color.red;
+            }
+            else BulletsInMagText.color = Color.white;
+
+            BulletsInMag = newBulletsInMag;
+            this.BulletsInMagText.text = BulletsInMag.ToString();
+            
+        }
+       
+    }
+
+    private void Update()
+    {
+        UpdateBulletsInMagUI();
+    }
+
+    public void UpdateBulletsInMagUI()
+    {
+        BulletsInMagText.text = statsManager.GetBulletsInMag().ToString();
+    }
+
     public void UI_Update_Game_State(string newGameState)
     {
         if (this.currentGameState != newGameState)

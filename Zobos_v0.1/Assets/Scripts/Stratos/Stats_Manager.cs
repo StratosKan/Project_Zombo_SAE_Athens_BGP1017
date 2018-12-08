@@ -16,8 +16,8 @@ public class Stats_Manager : MonoBehaviour
 
     private int weaponType;         //weapon currently equipped
     private int inventoryGrenadesCount; //How many? TODO: grenade types if any
-    private int bulletsInMagazine;  //Magazine bullets
-    private int bulletsRemaining;  //Overall bullets
+    private int MagazineSize=30;  //Magazine Size
+    public int BulletsInMag=30;  //Bullets currently in Magazine
 
     private string currentGameState = "Parking"; // TODO: name them and make game state manager.
     private string currentAIState;
@@ -102,6 +102,22 @@ public class Stats_Manager : MonoBehaviour
         this.playerStamina = newPlayerStamina;
         uiManager.UI_Update_Stamina(playerStamina);        
     }
+
+    public int GetMagSize()
+    {
+        return MagazineSize;
+    }
+
+    public int GetBulletsInMag()
+    {
+        return BulletsInMag;
+    }
+
+    public void SetBulletsInMag()
+    {
+        uiManager.UI_Update_BulletsInMag(GetBulletsInMag());
+    }
+
     public void OneMoreOnTheHouse()
     {
         this.stimpacksUsed++;
