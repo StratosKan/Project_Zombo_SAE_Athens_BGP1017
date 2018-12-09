@@ -103,6 +103,16 @@ public class Stats_Manager : MonoBehaviour
         uiManager.UI_Update_Stamina(playerStamina);        
     }
 
+    public int GetKills()
+    {
+        return zombosKilledInSession;
+    }
+
+    public int GetHeadshots()
+    {
+        return zombosKilledWithHeadshot;
+    }
+
     public int GetMagSize()
     {
         return MagazineSize;

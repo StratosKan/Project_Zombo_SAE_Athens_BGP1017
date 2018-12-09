@@ -9,6 +9,8 @@ public class UI_Manager : MonoBehaviour,GameEventListener
 
     Text MagCapacityText;
     Text BulletsInMagText;
+    Text KillsText;
+    Text HeadshotsText;
 
     private string currentGameState;
     private int UI_Health;
@@ -16,6 +18,9 @@ public class UI_Manager : MonoBehaviour,GameEventListener
 
     private int MagCapacity;
     private int BulletsInMag;
+
+    private int Kills;
+    private int Headshots;
 
     private Stats_Manager statsManager;
 
@@ -48,6 +53,10 @@ public class UI_Manager : MonoBehaviour,GameEventListener
         this.BulletsInMagText.text = BulletsInMag.ToString();
         this.MagCapacityText = GameObject.Find("MagText").GetComponent<Text>();
         this.MagCapacityText.text = MagCapacity.ToString();
+        this.KillsText = GameObject.Find("KillsText").GetComponent<Text>();
+        this.KillsText.text = Kills.ToString();
+        this.HeadshotsText = GameObject.Find("HeadshotsText").GetComponent<Text>();
+        this.HeadshotsText.text = Headshots.ToString();
     }
     public void UI_Update_Health(int newPlayerHealth)
     {
@@ -99,11 +108,29 @@ public class UI_Manager : MonoBehaviour,GameEventListener
     private void Update()
     {
         UpdateBulletsInMagUI();
+        UpdateScoreInUI();
+        UpdateKillsInUI();
+        UpdateHeadshotsInUI();
     }
 
     public void UpdateBulletsInMagUI()
     {
         BulletsInMagText.text = statsManager.GetBulletsInMag().ToString();
+    }
+
+    public void UpdateScoreInUI()
+    {
+        //Score maybe?
+    }
+
+    public void UpdateKillsInUI()
+    {
+        KillsText.text = statsManager.GetKills().ToString();
+    }
+
+    public void UpdateHeadshotsInUI()
+    {
+        HeadshotsText.text = statsManager.GetHeadshots().ToString();
     }
 
     public void UI_Update_Game_State(string newGameState)

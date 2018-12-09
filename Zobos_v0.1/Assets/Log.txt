@@ -68,4 +68,12 @@ Added: - Interface GameEventListener
 Time: n/a
 Changed: 
 	- UI Ammo Bar got scrapped. Ammo counter created instead. Methods have been created to allow for proper display.
+================
+09-12-2018 Themis M
+Time: ~3h
+Added: 
+	- Tab Functionality based on the others' scripts
+Changed:
+	- Tab (Scoreboard) visuals
+================
  
