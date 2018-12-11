@@ -1,22 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
-
-
     public void NewGame()
     {
-        SceneManager.LoadScene("PrototypeF01-Themis Latest Merged");
+        // 1 should be our first playable scene, check build settings
+        SceneManager.LoadScene(1);
+        Time.timeScale = 1;
     }
 
     public void ToMainMenu()
     {
-
-        SceneManager.LoadScene("MainMenu");
-
-
+        // 0 should always be main menu, check build settings
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1;
     }
 
     public void Quit()
@@ -27,5 +24,4 @@ public class MainMenu : MonoBehaviour
          Application.Quit();
 #endif
     }
-
 }

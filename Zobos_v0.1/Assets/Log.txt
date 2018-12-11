@@ -76,4 +76,16 @@ Added:
 Changed:
 	- Tab (Scoreboard) visuals
 ================
- 
+11-12-18 Jim P
+Time: ~ 20h
+Added: 
+	- Better main building - build with Probuilder.
+	- New Textured material from https://cc0textures.com/.
+Changed:
+	- Plenty of materials.
+	- Lowered the volume in Main Menu.
+	- The sun
+Bugfix:
+	- MainMenu script, changing the time scale to 1 on scene change.
+TODO: Art Pass 1.
+================

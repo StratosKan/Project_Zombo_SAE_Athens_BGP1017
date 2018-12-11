@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/MainMenu2(Jimbos).unity
+- path: Assets/Scenes/ProtoScene Beta.unity
   isLoaded: 1
   isActive: 1
