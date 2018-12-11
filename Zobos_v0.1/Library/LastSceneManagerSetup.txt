@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/JimbosScene121118.unity
+- path: Assets/Scenes/MainMenu2(Jimbos).unity
   isLoaded: 1
   isActive: 1
