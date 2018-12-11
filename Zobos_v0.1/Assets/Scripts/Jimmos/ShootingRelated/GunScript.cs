@@ -50,9 +50,10 @@ public class GunScript : MonoBehaviour
 
     [Header("SFX Properties")]
     public AudioClip fireSFX;
-    private AudioSource fireSFXObject; //  Jimmo i put these on comments in case you or someone else need them, the whole SFX section is gonna be through
+    private AudioSource fireSFXsource; //  Jimmo i put these on comments in case you or someone else need them, the whole SFX section is gonna be through
     public AudioClip hitSFX;           //   the sound manager....hopefully.
     public GameObject hitSFXPrefab;
+    private AudioSource hitsSFXsource;
     public float hitSFXToDestroyTime = 1f;
 
     private InputManager input;
@@ -92,6 +93,7 @@ public class GunScript : MonoBehaviour
         //fireSFXObject = GetComponent<AudioSource>();
         input = GameObject.FindGameObjectWithTag("Manager").GetComponent<InputManager>();
         playerObject = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        fireSFXsource = GameObject.FindGameObjectWithTag("Gun").GetComponent<AudioSource>();
         cameraObject = Camera.main.gameObject;
         cameraObject.GetComponent<CameraLookScript>().currentTargetCameraAngle = zoomAngle;
         cameraObject.GetComponent<CameraLookScript>().zoomLatency = zoomLatency;
@@ -152,13 +154,14 @@ public class GunScript : MonoBehaviour
                 CreateVFX(hit);
             }
             // Handles SFX
-            SoundManager.instance.PlayShoot(fireSFX);
+            SoundManager.instance.PlayShoot(fireSFX, fireSFXsource);
             if (hit.collider)
            {
                GameObject instantiatedAudioSource = Instantiate(hitSFXPrefab, hit.point, Quaternion.identity);
                instantiatedAudioSource.transform.SetParent(hit.transform, true);
+               hitsSFXsource = instantiatedAudioSource.GetComponent<AudioSource>();
                 
-                SoundManager.instance.PlayHit(hitSFX);
+                SoundManager.instance.PlayHit(hitSFX, hitsSFXsource);
                 Destroy(instantiatedAudioSource, hitSFXToDestroyTime);
                
 

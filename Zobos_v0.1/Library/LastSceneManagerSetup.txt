@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Themis 9.12.unity
+- path: Assets/JimbosScene121118.unity
   isLoaded: 1
   isActive: 1

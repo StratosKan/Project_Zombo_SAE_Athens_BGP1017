@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Manager
   - Gun
+  - StepsTest
   layers:
   - Default
   - TransparentFX
