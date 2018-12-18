@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 222544152437415880}
   - component: {fileID: 114316360955648944}
   m_Layer: 5
-  m_Name: HeadshotsText
+  m_Name: HeadshotsOtherText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -772,7 +772,7 @@ Canvas:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1322224310001102}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}

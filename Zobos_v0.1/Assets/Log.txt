@@ -89,3 +89,9 @@ Bugfix:
 	- MainMenu script, changing the time scale to 1 on scene change.
 TODO: Art Pass 1.
 ================
+18-12-18 Jim P
+Time: N/A
+Bugfix:
+	- Some UI on Tab
+	- Some AI on Level
+================

@@ -118,7 +118,7 @@ public class ZomboMovement : MonoBehaviour
 
     public void Wander()
     {
-        if (Vector3.Distance(this.transform.position, wanderPoint) < 1.0f)
+        if (Vector3.Distance(this.transform.position, wanderPoint) < 3.0f) //NOTE: CHANGED CUZ JIM
         {
             wanderPoint = RandomWanderPoint();
         }
