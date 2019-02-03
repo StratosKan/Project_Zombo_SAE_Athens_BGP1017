@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
-
+//v2
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(ZomboMovement))]
 [RequireComponent(typeof(ZomboAttack))]
@@ -20,6 +20,7 @@ public class ZomboHealth : MonoBehaviour
 
 	void Start ()
     {
+        //refs to self and daddy
         this.navAgent = this.GetComponent<NavMeshAgent>();
         this.zomboMov = this.GetComponent<ZomboMovement>();
         this.zomboAtk = this.GetComponent<ZomboAttack>();
@@ -73,8 +74,11 @@ public class ZomboHealth : MonoBehaviour
 
     private void Die(int bodyPart)
     {
-        aiManager.ZomboDeath(bodyPart);
-        Destroy(gameObject);
+        var id = this.zomboMov.GetID();
+
+        aiManager.ZomboDeath(bodyPart,id);
+
+        Destroy(gameObject); //TODO:Remove/replace when animation is in.
     }
 
     //private void OnDestroy()

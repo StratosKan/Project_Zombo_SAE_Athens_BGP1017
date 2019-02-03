@@ -4603,11 +4603,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c57bc8c145cc891499324e6d805030a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onLevelChange: 0
   zomboPrefab: {fileID: 1759736833320870, guid: 474730b3e55ad884d9edc31ac821eece,
     type: 2}
   dadOFZombos: {fileID: 1849424274}
-  howManyZombosToSpawn: 10
   spawnPoints: []
+  endlessSpawn: 1
+  howManyToSpawnOnStart: 5
   zomboRespawnTimer: 2
 --- !u!114 &930360618
 MonoBehaviour:

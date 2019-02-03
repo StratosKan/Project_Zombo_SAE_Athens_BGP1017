@@ -1,4 +1,5 @@
 BEGIN OF LOG, STARDATE -304129.24632166413, LogShip Zombo:
+{Translated by S on 02/02/19, tho not a trekkie: November 14,  2018, Time: 19:48:08}
 ====== Log ======
 11-11-18 - Stratos K
 Time: 5h
@@ -63,3 +64,18 @@ Added: - Interface GameEventListener
        - GameStateMachine & IState (aborted and moved to unused). Need to re-evaluate purpose.
 	   - UI manager v1(and modified Stats manager to work accordingly)
 	   - Game Manager v1 (Very early version, works fine but interfaces not implemented on other systems yet.)
+===============
+02-02-19 - Stratos K
+Time: 3h
+Modified: - AI (manager) logic && code.
+          - Re-visited all code related to AI.
+===============
+03-02-19 - Stratos K
+Time: 11h
+Added: - AI_DB/AI_SO/AI_Zombo Experimental scripts with intent to implement scriptable objects for save/load and better workflow on AI design. Ignore for now.
+Modified: - AI_Movement: removed all updates and did some tweaks
+          - AI_Health: minor updates
+		  - AI_Attack: minor updates
+          - AI_Manager: Major overhaul. All updates for each AI are running on AI_Manager so everything is easier to manage/optimize.  
+		  Known issue: If spawn more than 50 ai in total array gets out of index (no problem in actual game atm).
+		  TODO: Interaction with objects / Push AI_Manager for v4 (final) / Work on animations with @themis / Game Manager and game events.

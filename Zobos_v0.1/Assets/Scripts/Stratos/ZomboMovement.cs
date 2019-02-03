@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
-//v2
+//v3
 [RequireComponent(typeof(ZomboAttack))]
 public class ZomboMovement : MonoBehaviour
 {
@@ -9,20 +9,24 @@ public class ZomboMovement : MonoBehaviour
     private NavMeshHit navHit;
     private NavMeshAgent agent;
     private ZomboAttack zomboAtk;
+    private int myID; //TEST
 
     private float fov = 120f; //field of view
     private float viewDistance = 10f;
     private float wanderRadius = 7.0f;
     private Vector3 wanderPoint; //the wandering point our AI generates to wander arround and ACT like a zombo.
     
+    private float zomboAttackRange = 1.3f; //TODO: Should these be here? Find a way arround.
+    private float zomboAttackSpeed = 0.7f;
+    //MOVED TO AI_MANAGER private float zomboAttackTimer;
+
+
     private string playerTag = "Player";
     private bool playerInRange = false;
-    private float zomboAttackRange = 1.3f; //TODO: TESTS AND GAMEPLAY
-    private float zomboAttackSpeed = 0.7f;
-    private float zomboAttackTimer;
 
     private bool isAware = false;
-    private Renderer zomboRenderer; // for testing purposes
+
+    private Renderer zomboRenderer; // for testing purposes TODO: Remove when zombo is alive.
     
     void Start ()
     {
@@ -37,37 +41,38 @@ public class ZomboMovement : MonoBehaviour
         this.zomboRenderer = this.GetComponent<MeshRenderer>();
         this.zomboAtk = this.GetComponent<ZomboAttack>();
 
-        this.zomboAttackTimer = zomboAttackSpeed * 3; //x3 is gameplay factor.
+        //MOVED TO AI_MANAGER this.zomboAttackTimer = zomboAttackSpeed * 3; //x3 is gameplay factor.
 	}
 	
-	void Update ()
-    {
-        if (isAware)
-        {
-            Chase(target);
-            zomboAttackTimer -= Time.deltaTime; //todo: gameplay test if it should be inside playerInRange bool.
+    //MOVED TO AI_MANAGER
+	//void Update ()
+ //   {
+ //       if (isAware) //ai(i).isAware
+ //       {
+ //           Chase(target);
+ //           zomboAttackTimer -= Time.deltaTime; //todo: gameplay test if it should be inside playerInRange bool.
 
-            if (playerInRange)
-            {
-                if (zomboAttackTimer <= 0) //in this version attack speed is on playerMovement because update runs on zomboMovement.
-                {
-                    zomboAtk.Attack(target);
-                    zomboAttackTimer = zomboAttackSpeed;
-                }
-                playerInRange = false;
-            }
+ //           if (playerInRange)
+ //           {
+ //               if (zomboAttackTimer <= 0) //in this version attack speed is on playerMovement because update runs on zomboMovement.
+ //               {
+ //                   zomboAtk.Attack(target);
+ //                   zomboAttackTimer = zomboAttackSpeed;
+ //               }
+ //               playerInRange = false;
+ //           }
 
-            //TODO: Evasive maneuvers            
-            zomboRenderer.material.color = Color.yellow;
-        }
-        else
-        {
-            //this.agent.SetDestination(dummyTargetTest.position);
-            SearchForPlayer();
-            Wander();
-            zomboRenderer.material.color = Color.blue;
-        }
-	}
+ //           //TODO: Evasive maneuvers            
+ //           zomboRenderer.material.color = Color.yellow;
+ //       }
+ //       else
+ //       {
+ //           //this.agent.SetDestination(dummyTargetTest.position);
+ //           SearchForPlayer();
+ //           Wander();
+ //           zomboRenderer.material.color = Color.blue;
+ //       }
+	//}
 
     public void Chase(Transform target)
     {
@@ -97,7 +102,29 @@ public class ZomboMovement : MonoBehaviour
         isAware = true;
     }
 
-    public void SearchForPlayer()
+    public bool AwareOrNot()
+    {
+        return isAware;
+    }
+    public bool IsPlayerInRange()
+    {
+        return playerInRange;
+    }
+    public void ResetPlayerInRange()
+    {
+        playerInRange = false;
+    }
+    public int GetID()
+    {
+        return myID;
+    }
+    public void ChangeMyID(int id)
+    {
+        myID = id;
+    }
+    //public void ChangeAgentColor(string )
+
+    public void SearchForPlayer() //Simplified version of SearchFor(Transform target).
     {
         if(Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(target.position)) < fov /2)  //Checks if player is within zombo fov...
         {

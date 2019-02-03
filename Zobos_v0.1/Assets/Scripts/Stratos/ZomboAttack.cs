@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-//v1
+//v2
 public class ZomboAttack : MonoBehaviour
 {
     private float zomboAttackSpeed = 0.7f; //default
@@ -19,7 +19,7 @@ public class ZomboAttack : MonoBehaviour
             {
                 playerHealth.TakeDamage(zomboAttackDamage);
                 attackCount++;
-                //playAnim();
+                //playAnim();  (1.06f)
                 //playAudio();
             }
             else
