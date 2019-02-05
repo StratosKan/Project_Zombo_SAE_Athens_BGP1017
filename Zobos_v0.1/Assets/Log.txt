@@ -95,3 +95,25 @@ Bugfix:
 	- Some UI on Tab
 	- Some AI on Level
 ================
+02-02-19 - Stratos K
+Time: 3h
+Modified: - AI (manager) logic && code.
+          - Re-visited all code related to AI.
+===============
+03-02-19 - Stratos K
+Time: 11h
+Added: - AI_DB/AI_SO/AI_Zombo Experimental scripts with intent to implement scriptable objects for save/load and better workflow on AI design. Ignore for now.
+Modified: - AI_Movement: removed all updates and did some tweaks
+          - AI_Health: minor updates
+		  - AI_Attack: minor updates
+          - AI_Manager: Major overhaul. All updates for each AI are running on AI_Manager so everything is easier to manage/optimize.  
+		  Known issue: If spawn more than 50 ai in total array gets out of index (no problem in actual game atm).
+		  TODO: Interaction with objects / Push AI_Manager for v4 (final) / Work on animations with @themis / Game Manager and game events.
+===============
+05-02-19 - Jim P
+Time: N/A
+Added: Shotgun gun with it's own sound and pre-model.
+Modified: Gun script now has bullets to fire per shot and maximum range variables. Changed the player movement variables a bit.
+Bugfix: Lighting now works way better. Also wall facing the sun has a collider now.			 
+TODO: Air movement/ Better movement, Gun change with scroll wheel.
+===============

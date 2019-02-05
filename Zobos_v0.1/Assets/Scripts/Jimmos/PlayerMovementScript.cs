@@ -15,7 +15,7 @@ public class PlayerMovementScript : MonoBehaviour
     private Vector3 moveDirection;
     private Vector3 targetDirection;
 
-    public bool playerShouldRun = false;   
+    public bool playerShouldRun = false;
 
     private CharacterController cController;
     private InputManager input;
@@ -34,36 +34,26 @@ public class PlayerMovementScript : MonoBehaviour
     private Vector3 dir;
     void Update()
     {
-        
+
         if (cController.isGrounded)
-        {            
-            Move();
+        {
             if (cController.velocity.magnitude > 5f && GetComponent<AudioSource>().isPlaying == false)
             {
                 walkSoundsource.clip = SoundManager.instance.WalkSound;
                 SoundManager.instance.WalkPitchRange(walkSoundsource);
-                walkSoundsource.Play();              
-
+                walkSoundsource.Play();
             }
-             
+
+            Move();       
 
             Sprint();
-            if (playerShouldRun)
-            {
-                SoundManager.instance.RunningMode(walkSoundsource);
-            }
+
             Jump();
-            if (input.Jump)
-            {
-                jumpSoundsource.clip = SoundManager.instance.JumpSound;
-                jumpSoundsource.Play();                
-            }
         }
         else
         {
             //AirMove(); //Implement me?
         }
-
 
         moveDirection.y -= gravity * Time.deltaTime; // Implementation of gravity 
         cController.Move(moveDirection * Time.deltaTime); // Making that little boy move
@@ -73,14 +63,23 @@ public class PlayerMovementScript : MonoBehaviour
     {
         moveDirection = new Vector3(-input.Vertical, 0, input.Horizontal);
         dir = cameraTransform.TransformDirection(moveDirection);
-        moveDirection = transform.TransformDirection(dir.x, 0, dir.z); /* So here we are, this code line here is an attempt to move player where camera is looking BUT at first when u looked up it was trying to move the player in the Y axis */       
-              
-
+        moveDirection = transform.TransformDirection(dir.x, 0, dir.z); /* So here we are, this code line here is an attempt to move player where camera is looking BUT at first when u looked up it was trying to move the player in the Y axis */
     }
 
     public void AirMove()
     {
-        //Implement me?
+        //Implement me please?
+
+        //Problem here is that actual player doesn't turn it's rotation always stays at 0.90.0 so keeping momentum is
+        // hard(er) need to look into more -Jim
+
+        //moveDirection.x += input.Vertical * 0.2f;
+        //moveDirection.z += -input.Horizontal * 0.2f;
+
+        //moveDirection = new Vector3(targetDirection.x, 0, targetDirection.z);
+
+        //dir = cameraTransform.TransformDirection(moveDirection);
+        //moveDirection = transform.TransformDirection(dir); 
     }
 
     public void Jump()
@@ -88,7 +87,8 @@ public class PlayerMovementScript : MonoBehaviour
         if (input.Jump)
         {
             moveDirection.y = jumpSpeed; // If space is pressed then the player jumps accordingly( maintains his velocity)
-            
+            jumpSoundsource.clip = SoundManager.instance.JumpSound;
+            jumpSoundsource.Play();
         }
     }
 
@@ -97,6 +97,7 @@ public class PlayerMovementScript : MonoBehaviour
         if (playerShouldRun) //TODO: Check if responsive enough.
         {
             moveDirection *= runSpeed;
+            SoundManager.instance.RunningMode(walkSoundsource);
         }
         else
         {

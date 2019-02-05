@@ -1,6 +1,6 @@
 WindowsStandalone
 PlayerPath?
-C:/Users/student04/Desktop/New folder/Zobos.exe
+C:/Users/James/Desktop/tbul/Zobos.exe
 SceneListBegin?
 Assets/Scenes/MainMenu2(Jimbos).unity
 Assets/Scenes/ProtoScene Beta.unity
