@@ -7,12 +7,12 @@ public class ZomboAttack : MonoBehaviour
     private int attackCount = 0;
     private string playerTag = "Player";
     private string enemyTag = "Enemy";
-    
+
     //Called by Zombo Movement in this version. Can be called from Zombo AI manager in the future
     public void Attack(Transform target) //transform can be optimised
     {
         if (target.gameObject.CompareTag(playerTag))
-        {        
+        {
             PlayerHealth playerHealth = target.GetComponent<PlayerHealth>();
 
             if (playerHealth != null)

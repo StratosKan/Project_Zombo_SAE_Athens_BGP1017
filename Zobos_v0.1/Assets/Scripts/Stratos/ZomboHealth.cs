@@ -18,7 +18,7 @@ public class ZomboHealth : MonoBehaviour
     private ZomboMovement zomboMov;
     private ZomboAttack zomboAtk;
 
-	void Start ()
+    void Start()
     {
         //refs to self and daddy
         this.navAgent = this.GetComponent<NavMeshAgent>();
@@ -30,9 +30,9 @@ public class ZomboHealth : MonoBehaviour
         {
             Debug.Log("ERROR: Can't find AI manager. SOURCE: " + this.transform.name);
         }
-	}
+    }
 
-    public void ApplyDamage (float amount,int bodyPart) //TODO: add gunType (1 for AR, 2 for pistol and so on).
+    public void ApplyDamage(float amount, int bodyPart) //TODO: add gunType (1 for AR, 2 for pistol and so on).
     {                                                    //FUTURE TODO: add player ID for multiplayer.
         if (!roidRage) //first hit awakes the zombie
         {
@@ -45,7 +45,7 @@ public class ZomboHealth : MonoBehaviour
             {
                 zomboHealth = 0;
                 Die(bodyPart);
-            }            
+            }
         }
         else
         {
@@ -76,7 +76,7 @@ public class ZomboHealth : MonoBehaviour
     {
         var id = this.zomboMov.GetID();
 
-        aiManager.ZomboDeath(bodyPart,id);
+        aiManager.ZomboDeath(bodyPart, id);
 
         Destroy(gameObject); //TODO:Remove/replace when animation is in.
     }

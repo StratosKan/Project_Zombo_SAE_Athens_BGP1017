@@ -34,8 +34,8 @@ public class AI_Manager : MonoBehaviour
     private int zombosKilledInSession = 0;
     private int zombosKilledWithHeadshot = 0;
 
-    private Transform spawnPointsParkingDad; 
-    private int spawnChildrenCount; 
+    private Transform spawnPointsParkingDad;
+    private int spawnChildrenCount;
     public Vector3[] spawnPoints; //spawnPoint Control.    
     private int randomSpawnPoint;
 
@@ -52,7 +52,7 @@ public class AI_Manager : MonoBehaviour
     private float zomboAttackTimer; //TODO: DECIDE HOW MANY CLOCKS SHOULD BE RUNNING.
     private float defaultZomboAttackTimer = 0.7f;
 
-    void Start ()
+    void Start()
     {
         //TODO: Get stats_manager stats.
 
@@ -71,8 +71,8 @@ public class AI_Manager : MonoBehaviour
 
         CountTheChilden(spawnPointsParkingDad);
         //END IF
-        
-        if(howManyToSpawnOnStart > 0)
+
+        if (howManyToSpawnOnStart > 0)
         {
             MassiveZomboRandomSpawn(howManyToSpawnOnStart);
         }
@@ -82,7 +82,7 @@ public class AI_Manager : MonoBehaviour
         this.zomboAttackTimer = defaultZomboAttackTimer; //TODO: Tests
     }
 
-    void Update ()
+    void Update()
     {
         if (zombosAlive > 0)
         {
@@ -119,7 +119,7 @@ public class AI_Manager : MonoBehaviour
                         activeAgents[ai].GetComponent<MeshRenderer>().material.color = Color.blue;  //REMOVE WHEN MODEL IS ACTIVE.
                                                                                                     //color = blue
                     }
-                }                
+                }
             }
         }
         if (endlessSpawn)
@@ -134,7 +134,7 @@ public class AI_Manager : MonoBehaviour
                 zomboRespawnTimer = defaultZomboRespawnTimer;
             }
         }
-	}
+    }
 
     public void CountTheChilden(Transform spawnPointsDad) //v3 made it working arround whole project. Each level will have a spawnPointsDad and the actual spawnPoints will be his children.
     {
@@ -167,7 +167,7 @@ public class AI_Manager : MonoBehaviour
 
     public void RandomZomboSpawn()
     {
-        randomSpawnPoint = Random.Range(0, spawnChildrenCount - 1); //its inclusive MIN/MAX
+        randomSpawnPoint = Random.Range(0 , spawnChildrenCount - 1); //its inclusive MIN/MAX
         ZomboSpawn(spawnPoints[randomSpawnPoint]);
         //TODO: spawnPointCooldown;
     }
@@ -177,7 +177,7 @@ public class AI_Manager : MonoBehaviour
         ZomboSpawn(spawnPoints[index]);
     }
 
-    public void ZomboSpawn (Vector3 spawnPoint) //maybe use Transform here but no need for now.
+    public void ZomboSpawn(Vector3 spawnPoint) //maybe use Transform here but no need for now.
     {
         if (zombosAlive < MAX_ALLOWED_ZOMBOS)
         {
@@ -192,7 +192,7 @@ public class AI_Manager : MonoBehaviour
         {
             Debug.Log("AI MANAGER: MAX ALLOWED ZOMBOS ALIVE REACHED.");
         }
-    } 
+    }
     public void AddZomboAsEdge(GameObject zombo)
     {
         //applying references for optimal behaviour/control.
@@ -207,7 +207,7 @@ public class AI_Manager : MonoBehaviour
         activeAgentsMovementScripts[zombosSpawned].ChangeMyID(zombosSpawned); //ID is on zombo as well
     }
 
-    public void ZomboDeath(int bodyPart , int zomboID) //1 for anything , 2 for headshot
+    public void ZomboDeath(int bodyPart, int zomboID) //1 for anything , 2 for headshot
     {
         if (bodyPart == 2)
         {
