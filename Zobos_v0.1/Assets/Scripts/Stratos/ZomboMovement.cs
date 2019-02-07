@@ -104,7 +104,8 @@ public class ZomboMovement : MonoBehaviour
     public void OnAware()          //This can and will also be handled by AI Manager in later version.
     {
         isAware = true;
-        this.agent.speed = 4.0f;
+        this.GetComponent<NavMeshAgent>().speed = 4.0f;
+        //this.agent.speed = 4.0f;
     }
     public bool AwareOrNot()
     {

@@ -141,47 +141,43 @@ public class UI_Manager : MonoBehaviour,GameEventListener
             this.locationText.text = currentGameState;
         }
     }
-    public void OnGameExit()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnGamePause()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnGameStart()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnGameUnpause()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnLevelChange()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnLevelOne()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnLevelTwo()
-    {
-        throw new System.NotImplementedException();
-    }
 
     public void OnNewGame()
     {
         throw new System.NotImplementedException();
     }
 
+    public void OnCollegeArea()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnParking()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnSecondFloor()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnSecretLab()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnSecretLabTwo()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public void OnPlayerDeath()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnEndlessArcaneMode()
     {
         throw new System.NotImplementedException();
     }

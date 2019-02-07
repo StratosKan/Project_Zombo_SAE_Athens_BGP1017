@@ -19,8 +19,9 @@ public class Stats_Manager : MonoBehaviour
     private int MagazineSize=30;  //Magazine Size
     public int BulletsInMag=30;  //Bullets currently in Magazine
 
-    private string currentGameState = "Parking"; // TODO: name them and make game state manager.
-    private string currentAIState;
+    private string currentGameState = "Street"; // TODO: name them and make game state manager.
+    private string currentSceneName = "Scene01"; //TODO: getActiveSceneName on awake (if scene01 gamestate=street if scene02 gamestate=secretLab)!
+    //private string currentAIState;
 
     private bool tutorialEnabled; //TODO: make tutorial?
     private int tutorialProgress;
@@ -43,24 +44,17 @@ public class Stats_Manager : MonoBehaviour
         this.uiManager = this.GetComponent<UI_Manager>();
     }
 
-	void Update () //UPDATE CAN BE REMOVED IN FUTURE VERSION.
-    {
-        updateTimer -= Time.deltaTime;
+	//void Update () //UPDATE CAN BE REMOVED IN FUTURE VERSION.
+ //   {
+ //       updateTimer -= Time.deltaTime;
 
-        if (updateTimer <= 0)
-        {
-            aiManager.StatsUpdate(); //Stats Update is a function on all manager script that returns the most useful information.
-            
-            //dummyString = "STATS UPDATE: ZombosKilledInSession: " + zombosKilledInSession + " ZombosAlive: " + zombosAlive + " ZombosHS: " + zombosKilledWithHeadshot;
-            //Debug.Log(dummyString);
-            //UI_Update_Game_State(currentGameState);
-            //Player_Update(); TODO
-            //Level_Update();
-            //UI_Update();
+ //       if (updateTimer <= 0)
+ //       {
+ //           aiManager.StatsUpdate(); //Stats Update is a function on all manager script that returns the most useful information.
 
-            updateTimer = 2.0f; //frequency will change on future update. Required optimization.
-        }
-	}
+ //           updateTimer = 2.0f; //frequency will change on future update. Required optimization.
+ //       }
+	//}
 
     //TODO: When making save file make sure save is loaded before this method!!!!! SOS
     public void AI_Update(                                                           
@@ -138,6 +132,10 @@ public class Stats_Manager : MonoBehaviour
     public string GetGameState()
     {
         return currentGameState;
+    }
+    public string GetSceneName()
+    {
+        return currentSceneName;
     }
     public void ChangeGameState(string newState)
     {

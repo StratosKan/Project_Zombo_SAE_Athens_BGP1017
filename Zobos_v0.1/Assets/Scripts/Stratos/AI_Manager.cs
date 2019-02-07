@@ -8,23 +8,23 @@ using UnityEngine.AI;
 public class AI_Manager : MonoBehaviour
 {
     //private string currentState = "LEVEL1";
-    private int MAX_ALLOWED_ZOMBOS = 10;
+    private int MAX_ALLOWED_ZOMBOS = 25;
 
     public bool onLevelChange; //Need?
 
     public GameObject zomboPrefab;
     public Transform dadOFZombos;
 
-    private GameObject[] activeAgents = new GameObject[50];                  //reference to everything AI related so we can use for our needs.
-    private Vector3[] activeAgentsPositions = new Vector3[50];
+    private GameObject[] activeAgents = new GameObject[25];                  //reference to everything AI related so we can use for our needs.
+    private Vector3[] activeAgentsPositions = new Vector3[25];
 
-    private ZomboAttack[] activeAgentsAtkScripts = new ZomboAttack[50];
-    private ZomboMovement[] activeAgentsMovementScripts = new ZomboMovement[50];
-    private ZomboHealth[] activeAgentsHealthScripts = new ZomboHealth[50];
-    private NavMeshAgent[] activeAgentsNavMesh = new NavMeshAgent[50];
+    private ZomboAttack[] activeAgentsAtkScripts = new ZomboAttack[25];
+    private ZomboMovement[] activeAgentsMovementScripts = new ZomboMovement[25];
+    private ZomboHealth[] activeAgentsHealthScripts = new ZomboHealth[25];
+    private NavMeshAgent[] activeAgentsNavMesh = new NavMeshAgent[25];
 
-    private int[] activeAgentsID = new int[50];
-    private bool[] activeAgentsEnabled = new bool[50];
+    private int[] activeAgentsID = new int[25];
+    private bool[] activeAgentsEnabled = new bool[25];
     //private bool[] activeAgentsAware = new bool[50]; TODODODODODODO
 
     //EXPERIMENTAL NOTE: AI_SO to apply modifications on spawn.
@@ -184,6 +184,24 @@ public class AI_Manager : MonoBehaviour
             activeAgents[zombosSpawned] = Instantiate(zomboPrefab, spawnPoint, Quaternion.identity, dadOFZombos);
 
             AddZomboAsEdge(activeAgents[zombosSpawned]);
+
+            zombosSpawned++;
+            zombosAlive++;
+        }
+        else
+        {
+            Debug.Log("AI MANAGER: MAX ALLOWED ZOMBOS ALIVE REACHED.");
+        }
+    }
+    public void AwareZomboSpawn(Vector3 spawnPoint)
+    {
+        if (zombosAlive < MAX_ALLOWED_ZOMBOS)
+        {
+            activeAgents[zombosSpawned] = Instantiate(zomboPrefab, spawnPoint, Quaternion.identity, dadOFZombos);
+
+            AddZomboAsEdge(activeAgents[zombosSpawned]);
+
+            activeAgentsMovementScripts[zombosSpawned].OnAware(); //this!!
 
             zombosSpawned++;
             zombosAlive++;

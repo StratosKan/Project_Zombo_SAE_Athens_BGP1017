@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\Stratos\GameManager.cs" />
     <Compile Include="Assets\Scripts\Stratos\PlayerHealth.cs" />
     <Compile Include="Assets\Scripts\Stratos\Stats_Manager.cs" />
+    <Compile Include="Assets\Scripts\Stratos\TriggerEnterEvent.cs" />
     <Compile Include="Assets\Scripts\Stratos\Unused\GameStateMachine.cs" />
     <Compile Include="Assets\Scripts\Stratos\Unused\IState.cs" />
     <Compile Include="Assets\Scripts\Stratos\Unused\PlayerController.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Assets\Scripts\Stratos\ZomboAttack.cs" />
     <Compile Include="Assets\Scripts\Stratos\ZomboHealth.cs" />
     <Compile Include="Assets\Scripts\Stratos\ZomboMovement.cs" />
+    <Compile Include="Assets\Scripts\Stratos\ZomboSpawnTriggerEvent.cs" />
     <Compile Include="Assets\Scripts\Themis\Flicker.cs" />
     <Compile Include="Assets\Scripts\Themis\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Themis\MoveMe.cs" />

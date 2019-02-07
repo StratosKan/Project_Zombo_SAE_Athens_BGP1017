@@ -117,3 +117,16 @@ Modified: Gun script now has bullets to fire per shot and maximum range variable
 Bugfix: Lighting now works way better. Also wall facing the sun has a collider now.			 
 TODO: Air movement/ Better movement, Gun change with scroll wheel.
 ===============
+06-02-19 - Stratos K
+Time: N/A
+Modified: Minor AI bugfixes. Re-baked nav mesh. Spawnpoint5 is buggy.
+===============
+07-02-19 - Stratos K
+Time: 7h
+Added: -TriggerEnterEvent script
+       -ZomboSpawnTriggerEvent script
+Modified: - Game Manager v2 (not stable, major changes, much more to come)
+          - GameEventListener interface(not stable)
+		  - Stats Manager (minor changes & a couple new methods)
+Removed:  -Cars
+TODO: Interaction with objects / Push AI_Manager for v4 (final)/ Game Manager v3 (final)/ Objective tracker.
