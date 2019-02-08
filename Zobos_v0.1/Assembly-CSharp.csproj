@@ -98,7 +98,12 @@
     <Compile Include="Assets\Scripts\Themis\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Themis\MoveMe.cs" />
     <Compile Include="Assets\Scripts\Themis\UI_Manager.cs" />
+    <None Include="Assets\Complete_Home_Interior_Pack\NEKOBOLT_Demo_Packs\Nekobolt_Demo_Packs_Readme.txt" />
+    <None Include="Assets\Complete_Home_Interior_Pack\NEKOBOLT_Demo_Packs\Survivalist_Health_Pack_DEMO\UAS_SHP_Readme.txt" />
+    <None Include="Assets\Complete_Home_Interior_Pack\README.txt" />
     <None Include="Assets\Log.txt" />
+    <None Include="Assets\Complete_Home_Interior_Pack\CHIP_Prefabs\PRE_Ceilings\HSHP_PRE_CEI_Ceiling_preview.txt" />
+    <None Include="Assets\Complete_Home_Interior_Pack\HELP.txt" />
     <Reference Include="Unity.ProBuilder.AddOns.Editor">
       <HintPath>D:/D-P-V/DLs/GitRepository/Project_Zombo_SAE_Athens_BGP1017/Zobos_v0.1/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
     </Reference>
