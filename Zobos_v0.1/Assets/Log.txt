@@ -130,3 +130,14 @@ Modified: - Game Manager v2 (not stable, major changes, much more to come)
 		  - Stats Manager (minor changes & a couple new methods)
 Removed:  -Cars
 TODO: Interaction with objects / Push AI_Manager for v4 (final)/ Game Manager v3 (final)/ Objective tracker.
+===============
+12-02-19 - Stratos K
+Time: 6h
+Added: - PlayerInteractSensor script
+       - InteractWith script
+	   - IInteractable interface script
+	   - 3 testing interaction cubes
+Modified: - Player Health && Stats_Manager(added stimpack functionality)
+          - UI_Manager (added Interaction functionality (missing Canvas display))
+		  - InputManager (added Interaction with E (use F if u like))
+TODO: Push AI_Manager for v4 (final)/ Game Manager v3 (final)/ UI display stimpacks/objectives/Interaction key

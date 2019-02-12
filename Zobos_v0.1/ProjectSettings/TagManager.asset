@@ -9,6 +9,7 @@ TagManager:
   - Manager
   - Gun
   - StepsTest
+  - Interactable
   layers:
   - Default
   - TransparentFX
