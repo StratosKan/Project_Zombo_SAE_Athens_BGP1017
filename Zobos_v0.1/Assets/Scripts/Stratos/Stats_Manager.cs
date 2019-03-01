@@ -12,7 +12,7 @@ public class Stats_Manager : MonoBehaviour
     private float MAX_ALLOWED_PLAYER_STAMINA = 30f;
 
     private int stimpacksUsed; //HEALS
-    //private int stimpacksOnPlayer; //INVENTORY!!!
+    private int stimpacksOnPlayer = 1; //starting with 1 stimpack
 
     private int weaponType;         //weapon currently equipped
     private int inventoryGrenadesCount; //How many? TODO: grenade types if any
@@ -128,6 +128,10 @@ public class Stats_Manager : MonoBehaviour
         //PLAY_AUDIO();
         //PLAY_ANIM();
         //UPDATE_UI();
+    }
+    public int GetStimpacksOnPlayer()
+    {
+        return stimpacksOnPlayer;
     }
     public string GetGameState()
     {

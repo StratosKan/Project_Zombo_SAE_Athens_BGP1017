@@ -113,6 +113,19 @@ public class UI_Manager : MonoBehaviour,GameEventListener
         UpdateHeadshotsInUI();
     }
 
+    public void UpdateInteractionInUI(bool shouldShow)
+    {
+        if (shouldShow)
+        {
+            Debug.Log("Press E to interact");
+            //TODO: some text enable instant
+        }
+        else
+        {
+            //TODO: some text disable instant
+        }
+    }
+
     public void UpdateBulletsInMagUI()
     {
         BulletsInMagText.text = statsManager.GetBulletsInMag().ToString();

@@ -83,7 +83,10 @@
     <Compile Include="Assets\Scripts\Stratos\AI_Zombo.cs" />
     <Compile Include="Assets\Scripts\Stratos\GameEventListener.cs" />
     <Compile Include="Assets\Scripts\Stratos\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Stratos\IInteractable.cs" />
+    <Compile Include="Assets\Scripts\Stratos\InteractWith.cs" />
     <Compile Include="Assets\Scripts\Stratos\PlayerHealth.cs" />
+    <Compile Include="Assets\Scripts\Stratos\PlayerInteractSensor.cs" />
     <Compile Include="Assets\Scripts\Stratos\Stats_Manager.cs" />
     <Compile Include="Assets\Scripts\Stratos\TriggerEnterEvent.cs" />
     <Compile Include="Assets\Scripts\Stratos\Unused\GameStateMachine.cs" />

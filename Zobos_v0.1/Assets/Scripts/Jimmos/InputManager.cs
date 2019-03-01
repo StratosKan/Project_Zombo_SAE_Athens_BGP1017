@@ -7,7 +7,8 @@ public class InputManager : MonoBehaviour
     //This player input manager tries to add an extra layer between character movement and player input.
     public bool IsRunning { get; private set; }
     public bool Jump { get; private set; }
-    public bool StimpackUse { get; private set; }    
+    public bool StimpackUse { get; private set; }
+    public bool Interaction { get; private set; }
 
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
@@ -39,7 +40,9 @@ public class InputManager : MonoBehaviour
 
             Jump = Input.GetKey(KeyCode.Space);
             IsRunning = Input.GetKey(KeyCode.LeftShift);
-            StimpackUse = Input.GetKey(KeyCode.X); 
+            StimpackUse = Input.GetKey(KeyCode.X);
+            Interaction = Input.GetKey(KeyCode.E);
+            
 
             MouseX = Input.GetAxis("Mouse X");
             MouseY = Input.GetAxis("Mouse Y");
@@ -50,8 +53,7 @@ public class InputManager : MonoBehaviour
         }
         else if (GameIsPaused)
         {
-
-            Debug.Log("Am now set at Pause Menu");
+            //Debug.Log("Am now set at Pause Menu");
         }
     }
 

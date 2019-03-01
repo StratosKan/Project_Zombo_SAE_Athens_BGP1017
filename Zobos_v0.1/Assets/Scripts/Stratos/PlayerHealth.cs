@@ -17,6 +17,7 @@ public class PlayerHealth : MonoBehaviour
 
     private int playerArmor;
 
+    private int stimpacksOnMe;
     private int stimpacksUsed;
     private int stimpackHealAmount = 30;
 
@@ -51,6 +52,8 @@ public class PlayerHealth : MonoBehaviour
 
             this.timeSinceLastStaminaDrain = this.defaultTimeSinceLastStaminaDrain;
 
+            this.stimpacksOnMe = stats_manager.GetStimpacksOnPlayer();
+
             Debug.Log("PLAYER HEALTH: " + playerHealth + " PLAYER STAMINA: " + playerStamina + " PLAYER ARMOR: " + playerArmor);
 
             if (playerArmor == 0 || playerStamina == 0 || playerHealth == 0)
@@ -75,14 +78,17 @@ public class PlayerHealth : MonoBehaviour
         }
         if (shouldHeal)
         {
-            if (playerHealth < MAX_ALLOWED_PLAYER_HEALTH)
+            if(stimpacksOnMe > 0)
             {
-                HealPlayer(stimpackHealAmount, 1);
-            }
-            else
-            {
-                Debug.Log("ALREADY AT MAX HEALTH");
-                //TODO UI MESSAGE
+                if (playerHealth < MAX_ALLOWED_PLAYER_HEALTH)
+                {
+                    HealPlayer(stimpackHealAmount, 1);
+                }
+                else
+                {
+                    Debug.Log("ALREADY AT MAX HEALTH");
+                    //TODO UI MESSAGE
+                }
             }
         }
     }
@@ -137,6 +143,7 @@ public class PlayerHealth : MonoBehaviour
             {
                 this.playerHealth = MAX_ALLOWED_PLAYER_HEALTH;
             }
+            stimpacksOnMe--;
             stimpacksUsed++;
             stats_manager.OneMoreOnTheHouse();
             stats_manager.SetPlayerHealth(this.playerHealth);
@@ -181,5 +188,11 @@ public class PlayerHealth : MonoBehaviour
         //AUDIO_WHATEVER();
         
         //SCENE LOAD OCCURS FROM STATS MANAGER OR GAME MANAGER NOT FROM PLAYER. TY
+    }
+    public void AddStimPack()
+    {
+        stimpacksOnMe++;
+        Debug.Log("PLAYERHEALTH: Stimpack added: " + stimpacksOnMe);
+        //UPDATE UI through Stats
     }
 }
