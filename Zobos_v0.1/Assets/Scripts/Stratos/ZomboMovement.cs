@@ -15,7 +15,7 @@ public class ZomboMovement : MonoBehaviour
     private float wanderRadius = 9.0f;
     private Vector3 wanderPoint; //the wandering point our AI generates to wander arround and ACT like a zombo.
 
-    private float zomboAttackRange = 1.3f; //TODO: Should these be here? Find a way arround.
+    private float zomboAttackRange = 2f; //TODO: Should these be here? Find a way arround.
 
     private string playerTag = "Player";
     private bool playerInRange = false;

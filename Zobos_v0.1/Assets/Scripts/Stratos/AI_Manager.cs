@@ -50,7 +50,9 @@ public class AI_Manager : MonoBehaviour
     private string playerTag = "Player";
     private Transform target;
     private float zomboAttackTimer; //TODO: DECIDE HOW MANY CLOCKS SHOULD BE RUNNING.
-    private float defaultZomboAttackTimer = 0.7f;
+    private float defaultZomboAttackTimer = 1f;
+
+    public float rotationalSpeed = 3f; //For facing the player
 
     void Start()
     {
@@ -90,6 +92,12 @@ public class AI_Manager : MonoBehaviour
             {
                 if (activeAgentsEnabled[ai]) //Checks if it should do the updates on this AI.
                 {
+                    //Anim
+                    //activeAgentsMovementScripts[ai].gameObject.GetComponent<Animator>().SetBool("IsWalking", true);
+
+                    activeAgentsMovementScripts[ai].gameObject.GetComponent<Animator>().SetFloat("WalkSpeed", activeAgentsNavMesh[ai].speed);
+                    //Anim
+
                     if (activeAgentsMovementScripts[ai].AwareOrNot())
                     {
                         activeAgentsMovementScripts[ai].Chase(target);
@@ -100,6 +108,19 @@ public class AI_Manager : MonoBehaviour
                         {
                             if (zomboAttackTimer <= 0)
                             {
+                                //Anim
+                                //Rotate towards player
+                                Vector3 lookPos = target.position - activeAgents[ai].transform.position;
+                                lookPos.y = 0;
+                                Quaternion rotation = Quaternion.LookRotation(lookPos);
+                                activeAgents[ai].transform.rotation = Quaternion.Slerp(activeAgents[ai].transform.rotation, rotation, rotationalSpeed);
+                                //Rotate towards player
+
+                                activeAgentsMovementScripts[ai].gameObject.GetComponent<Animator>().SetBool("IsWalking", false);
+
+                                activeAgentsMovementScripts[ai].gameObject.GetComponent<Animator>().SetBool("IsAttacking", true);
+                                //Anim
+
                                 activeAgentsAtkScripts[ai].Attack(target);
 
                                 zomboAttackTimer = defaultZomboAttackTimer;
@@ -107,17 +128,26 @@ public class AI_Manager : MonoBehaviour
 
                             activeAgentsMovementScripts[ai].ResetPlayerInRange();
                         }
+                        else
+                        {
+                            //Anim
+                            activeAgentsMovementScripts[ai].gameObject.GetComponent<Animator>().SetBool("IsAttacking", false);
 
-                        activeAgents[ai].GetComponent<MeshRenderer>().material.color = Color.yellow; //REMOVE WHEN MODEL IS ACTIVE.
-                                                                                                     //color = yellow
+                            activeAgentsMovementScripts[ai].gameObject.GetComponent<Animator>().SetBool("IsWalking", true);
+                            //Anim
+                        }
+
+                        //activeAgents[ai].GetComponent<MeshRenderer>().material.color = Color.yellow; //REMOVE WHEN MODEL IS ACTIVE.
+                        //color = yellow
                     }
                     else
                     {
+
                         activeAgentsMovementScripts[ai].SearchForPlayer();
                         activeAgentsMovementScripts[ai].Wander();
 
-                        activeAgents[ai].GetComponent<MeshRenderer>().material.color = Color.blue;  //REMOVE WHEN MODEL IS ACTIVE.
-                                                                                                    //color = blue
+                        //activeAgents[ai].GetComponent<MeshRenderer>().material.color = Color.blue;  //REMOVE WHEN MODEL IS ACTIVE.
+                        //color = blue
                     }
                 }
             }
@@ -167,7 +197,7 @@ public class AI_Manager : MonoBehaviour
 
     public void RandomZomboSpawn()
     {
-        randomSpawnPoint = Random.Range(0 , spawnChildrenCount - 1); //its inclusive MIN/MAX
+        randomSpawnPoint = Random.Range(0, spawnChildrenCount - 1); //its inclusive MIN/MAX
         ZomboSpawn(spawnPoints[randomSpawnPoint]);
         //TODO: spawnPointCooldown;
     }

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/ProtoScene Beta.unity
+- path: Assets/Scenes/ProtoScene Delta.unity
   isLoaded: 1
   isActive: 1

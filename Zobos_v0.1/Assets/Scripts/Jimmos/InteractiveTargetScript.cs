@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InteractiveTargetScript : MonoBehaviour
 {
@@ -15,21 +13,16 @@ public class InteractiveTargetScript : MonoBehaviour
 
 
     //TEMP
-    private Renderer tempMatHealth;
-    private Color32 color;
+    //private Renderer tempMatHealth;
+    //private Color32 color;
     //TEMP
 
     void Awake()
     {
         //TEMP
         ProtoHealth();
-
-        if (this.CompareTag(enemyTag) && this.transform.name == "Head")
-        {
-            this.zomboHealth = this.transform.parent.GetComponent<ZomboHealth>(); 
-            this.bodyPart = 2;
-        }
-        else if (this.CompareTag(enemyTag))  //checking if attached gameObject is a Zombo and then ref.
+        // The way the mesh is can't really differentiate the head from body so screw headshots -jim
+        if (this.CompareTag(enemyTag))
         {
             this.zomboHealth = this.GetComponent<ZomboHealth>();
             this.bodyPart = 1;
@@ -38,36 +31,37 @@ public class InteractiveTargetScript : MonoBehaviour
 
     private void ProtoHealth()
     {
-        tempMatHealth = GetComponent<Renderer>();
-        color = new Color32((byte)(health), 0, 0, 255);
-        tempMatHealth.material.color = color;
+        //tempMatHealth = GetComponent<Renderer>();
+        //color = new Color32((byte)(health), 0, 0, 255);
+        //tempMatHealth.material.color = color;
     }
 
-    public void TakeDamage (float amount) 
+    public void TakeDamage(float amount)
     {
         if (this.CompareTag(enemyTag))
         {
-            zomboHealth.ApplyDamage(amount,bodyPart);
+            zomboHealth.ApplyDamage(amount, bodyPart);
         }
         else
         {
             health -= amount;
 
             //TEMP
-            color = new Color32((byte)(health), 0, 0, 255);
-            tempMatHealth.material.color = color;
+            //color = new Color32((byte)(health), 0, 0, 255);
+            //tempMatHealth.material.color = color;
             //TEMP
 
             if (health <= 0)
             {
                 health = 0;
-                Die();
+                //Die();
             }
         }
     }
 
-    private void Die()
-    {
-        Destroy(gameObject);
-    }
+    // This is wrong dying part is done in ZomboHealth
+    //private void Die()
+    //{
+    //    Destroy(gameObject);
+    //}
 }

@@ -5,7 +5,7 @@ public class Flicker : MonoBehaviour
 {
 
     // Your light gameObject here.
-    public Light light;
+    public Light lightObject;
 
     // Array of random values for the intensity.
     private float[] smoothing = new float[20];
@@ -37,6 +37,6 @@ public class Flicker : MonoBehaviour
 
         // Compute the average of the array and assign it to the
         // light intensity.
-        light.intensity = sum / 2;
+        lightObject.intensity = sum / 2;
     }
 }

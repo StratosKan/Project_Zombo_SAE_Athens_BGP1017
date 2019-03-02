@@ -78,7 +78,10 @@ public class ZomboHealth : MonoBehaviour
 
         aiManager.ZomboDeath(bodyPart, id);
 
-        Destroy(gameObject); //TODO:Remove/replace when animation is in.
+        gameObject.GetComponent<Animator>().SetBool("IsDying", true);
+        Destroy(gameObject, 5f);
+
+        //Destroy(gameObject); //TODO:Remove/replace when animation is in.
     }
 
     //private void OnDestroy()
