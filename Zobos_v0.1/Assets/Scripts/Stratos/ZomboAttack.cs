@@ -3,7 +3,7 @@
 public class ZomboAttack : MonoBehaviour
 {
     private float zomboAttackSpeed = 0.9f; //default was 0.7f
-    private int zomboAttackDamage = 5;
+    private int zomboAttackDamage = 3;
     private int attackCount = 0;
     private string playerTag = "Player";
     private string enemyTag = "Enemy";

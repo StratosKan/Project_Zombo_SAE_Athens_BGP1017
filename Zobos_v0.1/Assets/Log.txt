@@ -141,3 +141,9 @@ Modified: - Player Health && Stats_Manager(added stimpack functionality)
           - UI_Manager (added Interaction functionality (missing Canvas display))
 		  - InputManager (added Interaction with E (use F if u like))
 TODO: Push AI_Manager for v4 (final)/ Game Manager v3 (final)/ UI display stimpacks/objectives/Interaction key
+================
+02-03-19 - Stratos K
+Time: N/A
+Added:
+Modified:
+TODO:

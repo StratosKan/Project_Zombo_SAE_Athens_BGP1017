@@ -22,11 +22,6 @@ public class ZomboMovement : MonoBehaviour
 
     private bool isAware = false;
 
-    //MOVED TO AI_MANAGER private float zomboAttackTimer;
-    //private ZomboAttack zomboAtk;
-    //private float zomboAttackSpeed = 0.7f;
-    //private Renderer zomboRenderer; // for testing purposes TODO: Remove when zombo is alive.
-
     void Start()
     {
         //setting up refs
@@ -37,10 +32,6 @@ public class ZomboMovement : MonoBehaviour
 
         this.agent = this.GetComponent<NavMeshAgent>();
         this.wanderPoint = RandomWanderPoint();
-
-        //MOVED TO AI_MANAGER this.zomboAttackTimer = zomboAttackSpeed * 3; //x3 is gameplay factor.
-        //this.zomboRenderer = this.GetComponent<MeshRenderer>();
-        //this.zomboAtk = this.GetComponent<ZomboAttack>();
     }
 
     public void Chase(Transform target)
@@ -55,6 +46,7 @@ public class ZomboMovement : MonoBehaviour
         }
     }
 
+    //DEPRECATED ON FINAL VERSION
     public void SearchForPlayer()                                                             //Simplified version of SearchFor(Transform target).
     {
         if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(target.position)) < fov / 2)  //Checks if player is within zombo fov...
@@ -73,7 +65,7 @@ public class ZomboMovement : MonoBehaviour
             }
         }
     }
-
+    //DEPRECATED ON FINAL VERSION
     public void Wander()
     {
         if (Vector3.Distance(this.transform.position, wanderPoint) < 3.0f)
@@ -85,7 +77,7 @@ public class ZomboMovement : MonoBehaviour
             agent.SetDestination(wanderPoint);
         }
     }
-
+    //DEPRECATED ON FINAL VERSION
     public Vector3 RandomWanderPoint() //TODO: optimization.
     {
         Vector3 randomPoint = (Random.insideUnitSphere * wanderRadius) + transform.position; //Creates a random point in wanderRadius
@@ -104,7 +96,7 @@ public class ZomboMovement : MonoBehaviour
     public void OnAware()          //This can and will also be handled by AI Manager in later version.
     {
         isAware = true;
-        this.GetComponent<NavMeshAgent>().speed = 4.0f;
+        //this.GetComponent<NavMeshAgent>().speed = 4.0f;
         //this.agent.speed = 4.0f;
     }
     public bool AwareOrNot()
