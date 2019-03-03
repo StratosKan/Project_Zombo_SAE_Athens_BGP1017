@@ -2,37 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine.AI;
 
-//v3
+//v4(final)
 [RequireComponent(typeof(Stats_Manager))]
 
 public class AI_Manager : MonoBehaviour
 {
-    //private string currentState = "LEVEL1";
-    private int MAX_ALLOWED_ZOMBOS = 25;
-
-    public bool onLevelChange; //Need?
+    private int currentWave = 0; //TODODOODODO
+    private bool currentDifficulty = true; //Default set to hard.
+    private int MAX_ALLOWED_ZOMBOS = 40;
 
     public GameObject zomboPrefab;
     public Transform dadOFZombos;
 
-    private GameObject[] activeAgents = new GameObject[25];                  //reference to everything AI related so we can use for our needs.
-    private Vector3[] activeAgentsPositions = new Vector3[25];
+    private GameObject[] activeAgents = new GameObject[331];                  //reference to everything AI related so we can use for our needs.
+    private Vector3[] activeAgentsPositions = new Vector3[331];
 
-    private ZomboAttack[] activeAgentsAtkScripts = new ZomboAttack[25];
-    private ZomboMovement[] activeAgentsMovementScripts = new ZomboMovement[25];
-    private ZomboHealth[] activeAgentsHealthScripts = new ZomboHealth[25];
-    private NavMeshAgent[] activeAgentsNavMesh = new NavMeshAgent[25];
+    private ZomboAttack[] activeAgentsAtkScripts = new ZomboAttack[331];
+    private ZomboMovement[] activeAgentsMovementScripts = new ZomboMovement[331];
+    private ZomboHealth[] activeAgentsHealthScripts = new ZomboHealth[331];
+    private NavMeshAgent[] activeAgentsNavMesh = new NavMeshAgent[331];
+    private Animator[] activeAgentsAnimator = new Animator[331];
+    private float[] activeAgentsAttackTimer = new float[331];
 
-    private int[] activeAgentsID = new int[25];
-    private bool[] activeAgentsEnabled = new bool[25];
-    //private bool[] activeAgentsAware = new bool[50]; TODODODODODODO
-
-    //EXPERIMENTAL NOTE: AI_SO to apply modifications on spawn.
-
+    private int[] activeAgentsID = new int[331];
+    private bool[] activeAgentsEnabled = new bool[331];
+    
     private int zombosSpawned = 0; //This serves as a counter and an ID for zombos.
     private int zombosAlive = 0;
     private int zombosKilledInSession = 0;
-    private int zombosKilledWithHeadshot = 0;
+    private int zombosKilledWithHeadshot = 0; //deprecated because of model
 
     private Transform spawnPointsParkingDad;
     private int spawnChildrenCount;
@@ -44,13 +42,16 @@ public class AI_Manager : MonoBehaviour
     public int howManyToSpawnOnStart;
     public float zomboRespawnTimer;  //TODO: MAKE THIS AN OPTION AND/OR MAKE THIS WORK IN 
     private float defaultZomboRespawnTimer;
+    private bool wavePlaying = false;
 
-    private Stats_Manager stats_manager; //private test
+    private Stats_Manager stats_manager;
+    private GameManager gameManager;
 
     private string playerTag = "Player";
     private Transform target;
-    private float zomboAttackTimer; //TODO: DECIDE HOW MANY CLOCKS SHOULD BE RUNNING.
-    private float defaultZomboAttackTimer = 0.7f;
+    private float defaultZomboAttackTimer = 4f;
+
+    public float rotationalSpeed = 3f; //For facing the player
 
     void Start()
     {
@@ -58,6 +59,7 @@ public class AI_Manager : MonoBehaviour
 
         //TODO: GET GAME STATE!
 
+        this.gameManager = this.GetComponent<GameManager>();
         this.stats_manager = this.GetComponent<Stats_Manager>();
 
         if (target == null && GameObject.FindGameObjectWithTag(playerTag))
@@ -69,7 +71,7 @@ public class AI_Manager : MonoBehaviour
         //IF STATE PARKING
         spawnPointsParkingDad = GameObject.Find("ZomboSpawnPointsParking").transform; //Finding papa
 
-        CountTheChilden(spawnPointsParkingDad);
+        CountTheChildren(spawnPointsParkingDad);
         //END IF
 
         if (howManyToSpawnOnStart > 0)
@@ -78,8 +80,6 @@ public class AI_Manager : MonoBehaviour
         }
 
         defaultZomboRespawnTimer = zomboRespawnTimer;
-
-        this.zomboAttackTimer = defaultZomboAttackTimer; //TODO: Tests
     }
 
     void Update()
@@ -90,42 +90,65 @@ public class AI_Manager : MonoBehaviour
             {
                 if (activeAgentsEnabled[ai]) //Checks if it should do the updates on this AI.
                 {
-                    if (activeAgentsMovementScripts[ai].AwareOrNot())
+                    //Anim
+                    //activeAgentsMovementScripts[ai].gameObject.GetComponent<Animator>().SetBool("IsWalking", true);
+
+                    activeAgentsAnimator[ai].SetFloat("WalkSpeed", activeAgentsNavMesh[ai].speed);
+                    //Anim
+
+                    if (activeAgentsMovementScripts[ai].AwareOrNot()) //final version: ALL ZOMBOS AWARE MAYBE REMOVE
                     {
                         activeAgentsMovementScripts[ai].Chase(target);
+                        //Debug.Log(activeAgentsID[ai] + " Chasing player");
 
-                        zomboAttackTimer -= Time.deltaTime;
+                        activeAgentsAttackTimer[ai] -= Time.deltaTime;
 
                         if (activeAgentsMovementScripts[ai].IsPlayerInRange())
                         {
-                            if (zomboAttackTimer <= 0)
+                            if (activeAgentsAttackTimer[ai] <= 0)
                             {
+                                //Anim
+                                //Rotate towards player
+                                Vector3 lookPos = target.position - activeAgents[ai].transform.position;
+                                lookPos.y = 0;
+                                Quaternion rotation = Quaternion.LookRotation(lookPos);
+                                activeAgents[ai].transform.rotation = Quaternion.Slerp(activeAgents[ai].transform.rotation, rotation, rotationalSpeed);
+                                //Rotate towards player
+
+                                activeAgentsAnimator[ai].SetBool("IsWalking", false);
+
+                                activeAgentsAnimator[ai].SetBool("IsAttacking", true);
+                                //Anim
+
                                 activeAgentsAtkScripts[ai].Attack(target);
 
-                                zomboAttackTimer = defaultZomboAttackTimer;
+                                activeAgentsAttackTimer[ai] = defaultZomboAttackTimer;
                             }
 
                             activeAgentsMovementScripts[ai].ResetPlayerInRange();
                         }
+                        else
+                        {
+                            Debug.Log("We are here!");
+                            //Anim
+                            activeAgentsAnimator[ai].SetBool("IsAttacking", false);
 
-                        activeAgents[ai].GetComponent<MeshRenderer>().material.color = Color.yellow; //REMOVE WHEN MODEL IS ACTIVE.
-                                                                                                     //color = yellow
+                            activeAgentsAnimator[ai].SetBool("IsWalking", true);
+                            //Anim
+                        }
                     }
                     else
                     {
+                        //DEPRECATED BECAUSE WE SET ZOMBO AWARE BY DEFAULT
                         activeAgentsMovementScripts[ai].SearchForPlayer();
                         activeAgentsMovementScripts[ai].Wander();
-
-                        activeAgents[ai].GetComponent<MeshRenderer>().material.color = Color.blue;  //REMOVE WHEN MODEL IS ACTIVE.
-                                                                                                    //color = blue
                     }
                 }
             }
         }
         if (endlessSpawn)
         {
-            //NEST THIS
-            //TODO: Something when zombos are over 50. Maybe implement a stack/queue.
+            //TODO: NEST THIS
             zomboRespawnTimer -= Time.deltaTime;
 
             if (zomboRespawnTimer <= 0)
@@ -134,9 +157,37 @@ public class AI_Manager : MonoBehaviour
                 zomboRespawnTimer = defaultZomboRespawnTimer;
             }
         }
+        if (wavePlaying)
+        {
+            if (zombosAlive <= 0)
+            {
+                WaveFinished();
+                wavePlaying = false;
+            }
+        }
+    }
+    public void SpawnNextWave(bool difficulty) //ONLY CALLED FROM GAME_MANAGER
+    {
+        wavePlaying = false;
+
+        currentWave++;
+        TerminateActiveAgents();
+
+        int spawnFormula = 6 + currentWave; // max 120 + 210 = 330
+        MassiveZomboRandomSpawn(spawnFormula);
+
+        wavePlaying = true;
+        StatsUpdate();
+        Debug.Log("SPAWNING WAVE " + currentWave);
+    }
+    public void WaveFinished()
+    {
+        gameManager.NextWave();
+        //UPDATE UI_MANAGER
+        //GameManager wave finished awaiting orders
     }
 
-    public void CountTheChilden(Transform spawnPointsDad) //v3 made it working arround whole project. Each level will have a spawnPointsDad and the actual spawnPoints will be his children.
+    public void CountTheChildren(Transform spawnPointsDad) //v3 made it working arround whole project. Each level will have a spawnPointsDad and the actual spawnPoints will be his children.
     {
         spawnChildrenCount = spawnPointsDad.childCount;                        //Count the children
 
@@ -167,32 +218,16 @@ public class AI_Manager : MonoBehaviour
 
     public void RandomZomboSpawn()
     {
-        randomSpawnPoint = Random.Range(0 , spawnChildrenCount - 1); //its inclusive MIN/MAX
-        ZomboSpawn(spawnPoints[randomSpawnPoint]);
-        //TODO: spawnPointCooldown;
+        randomSpawnPoint = Random.Range(0, spawnChildrenCount - 1); //its inclusive MIN/MAX
+        AwareZomboSpawn(spawnPoints[randomSpawnPoint]);
+        //DEPRECATED: spawnPointCooldown;
     }
 
     public void ZomboSpawnByIndex(int index)  //Use this for trigger events.
     {
-        ZomboSpawn(spawnPoints[index]);
+        AwareZomboSpawn(spawnPoints[index]);
     }
 
-    public void ZomboSpawn(Vector3 spawnPoint) //maybe use Transform here but no need for now.
-    {
-        if (zombosAlive < MAX_ALLOWED_ZOMBOS)
-        {
-            activeAgents[zombosSpawned] = Instantiate(zomboPrefab, spawnPoint, Quaternion.identity, dadOFZombos);
-
-            AddZomboAsEdge(activeAgents[zombosSpawned]);
-
-            zombosSpawned++;
-            zombosAlive++;
-        }
-        else
-        {
-            Debug.Log("AI MANAGER: MAX ALLOWED ZOMBOS ALIVE REACHED.");
-        }
-    }
     public void AwareZomboSpawn(Vector3 spawnPoint)
     {
         if (zombosAlive < MAX_ALLOWED_ZOMBOS)
@@ -202,6 +237,7 @@ public class AI_Manager : MonoBehaviour
             AddZomboAsEdge(activeAgents[zombosSpawned]);
 
             activeAgentsMovementScripts[zombosSpawned].OnAware(); //this!!
+            //TODO: IF DIFFICULTY = HARD MODIFY STATS DEPENDING ON WAVE modifyStats(int wave)
 
             zombosSpawned++;
             zombosAlive++;
@@ -219,10 +255,43 @@ public class AI_Manager : MonoBehaviour
         activeAgentsHealthScripts[zombosSpawned] = zombo.GetComponent<ZomboHealth>();
         activeAgentsMovementScripts[zombosSpawned] = zombo.GetComponent<ZomboMovement>();
         activeAgentsNavMesh[zombosSpawned] = zombo.GetComponent<NavMeshAgent>();
+        activeAgentsAnimator[zombosSpawned] = zombo.GetComponent<Animator>();
+        activeAgentsAttackTimer[zombosSpawned] = defaultZomboAttackTimer;
 
-        activeAgentsID[zombosSpawned] = zombosSpawned; //TEST TEST TEST
+        activeAgentsID[zombosSpawned] = zombosSpawned; //Assigning ID
         activeAgentsEnabled[zombosSpawned] = true; //Toggled off from ZomboDeath().        
         activeAgentsMovementScripts[zombosSpawned].ChangeMyID(zombosSpawned); //ID is on zombo as well
+
+        if (currentDifficulty) //MEANS WE ARE ON HARD DIFFICULTY
+        {
+            int atkDifficultyFormula = 4 + currentWave;
+            activeAgentsAtkScripts[zombosSpawned].SetZomboAtkDmg(atkDifficultyFormula);
+
+            int healthDifficultyFormula = 95 + currentWave * 5;
+            activeAgentsHealthScripts[zombosSpawned].SetZomboHealth(healthDifficultyFormula);
+        }
+    }
+
+    public void TerminateActiveAgents() 
+    {
+        foreach(int ai in activeAgentsID)
+        {
+            if (activeAgentsEnabled[ai])
+            {
+                activeAgentsHealthScripts[ai].AI_ManagerTerminator(); //bye komrade, u failed xD 
+            }
+        }
+    }
+    public void TerminateSingleAgent(int id)
+    {
+        if (activeAgentsEnabled[id])
+        {
+            activeAgentsHealthScripts[id].AI_ManagerTerminator();
+        }
+    }
+    public void SetDifficulty(bool diff)
+    {
+        this.currentDifficulty = diff;
     }
 
     public void ZomboDeath(int bodyPart, int zomboID) //1 for anything , 2 for headshot
@@ -246,6 +315,23 @@ public class AI_Manager : MonoBehaviour
         activeAgentsEnabled[zomboID] = false; //Turns down the updates on that zombo.
 
         StatsUpdate();  //Stat tracking - Event-driven logic
+    }
+    //DEPRECATED
+    public void ZomboSpawn(Vector3 spawnPoint) //maybe use Transform here but no need for now.
+    {
+        if (zombosAlive < MAX_ALLOWED_ZOMBOS)
+        {
+            activeAgents[zombosSpawned] = Instantiate(zomboPrefab, spawnPoint, Quaternion.identity, dadOFZombos);
+
+            AddZomboAsEdge(activeAgents[zombosSpawned]);
+
+            zombosSpawned++;
+            zombosAlive++;
+        }
+        else
+        {
+            Debug.Log("AI MANAGER: MAX ALLOWED ZOMBOS ALIVE REACHED.");
+        }
     }
 
     public void StatsUpdate()

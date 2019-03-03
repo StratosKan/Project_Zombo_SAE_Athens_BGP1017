@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu2(Jimbos).unity
+    path: Assets/Scenes/Main Menu.unity
     guid: 509e11276bfb94645a84c0307c154cf1
   - enabled: 1
-    path: Assets/Scenes/ProtoScene Beta.unity
-    guid: 0f79288ec73bfeb48b9260fcb53b842f
+    path: Assets/Scenes/ProtoScene Delta.unity
+    guid: e248c1e341d668248a1a09109fd81607
+  - enabled: 1
+    path: Assets/Scenes/Death Scene.unity
+    guid: 519f38c7871bae940b30f88070cd21f1
   m_configObjects: {}

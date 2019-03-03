@@ -253,7 +253,8 @@ public class GunScript : MonoBehaviour
 
     private void Damage(RaycastHit hit)
     {
-        target = hit.transform.GetComponent<InteractiveTargetScript>();
+        target = hit.transform.GetComponentInParent<InteractiveTargetScript>();
+        //Debug.Log(target.GetHashCode());
         if (target != null)
         {
             target.TakeDamage(gunDamage);

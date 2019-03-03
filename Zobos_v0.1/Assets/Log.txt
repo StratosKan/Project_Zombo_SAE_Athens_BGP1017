@@ -141,3 +141,13 @@ Modified: - Player Health && Stats_Manager(added stimpack functionality)
           - UI_Manager (added Interaction functionality (missing Canvas display))
 		  - InputManager (added Interaction with E (use F if u like))
 TODO: Push AI_Manager for v4 (final)/ Game Manager v3 (final)/ UI display stimpacks/objectives/Interaction key
+================
+03-03-19 - Stratos K
+Time: 14h
+Added:  -OurSingletonFriend script
+        -2 new 
+Modified: -AI manager v4(bugfixed it and evolved it to handle wave spawning and difficulty)
+          -UI manager v2(added 2 new text objects and methods and crossfade)
+		  -Game Manager v3(Major overhaul to manage this zombo survival fiesta)
+		  -Lots of minor changes in zombo scripts.
+TODO: Nothing <3

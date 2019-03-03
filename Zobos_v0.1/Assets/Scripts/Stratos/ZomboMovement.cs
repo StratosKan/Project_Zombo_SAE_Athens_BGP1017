@@ -4,28 +4,23 @@ using UnityEngine.AI;
 [RequireComponent(typeof(ZomboAttack))]
 public class ZomboMovement : MonoBehaviour
 {
-    private Transform target; //player TODO: Aggro system for multiplayer
+    private Transform target;
     private RaycastHit hit;
     private NavMeshHit navHit;
     private NavMeshAgent agent;
-    private int myID; //TEST
+    private int myID;
 
     private float fov = 120f; //field of view
     private float viewDistance = 10f;
     private float wanderRadius = 9.0f;
     private Vector3 wanderPoint; //the wandering point our AI generates to wander arround and ACT like a zombo.
 
-    private float zomboAttackRange = 1.3f; //TODO: Should these be here? Find a way arround.
+    private float zomboAttackRange = 2f; //is Here to check playerInRange
 
     private string playerTag = "Player";
     private bool playerInRange = false;
 
     private bool isAware = false;
-
-    //MOVED TO AI_MANAGER private float zomboAttackTimer;
-    //private ZomboAttack zomboAtk;
-    //private float zomboAttackSpeed = 0.7f;
-    //private Renderer zomboRenderer; // for testing purposes TODO: Remove when zombo is alive.
 
     void Start()
     {
@@ -37,10 +32,6 @@ public class ZomboMovement : MonoBehaviour
 
         this.agent = this.GetComponent<NavMeshAgent>();
         this.wanderPoint = RandomWanderPoint();
-
-        //MOVED TO AI_MANAGER this.zomboAttackTimer = zomboAttackSpeed * 3; //x3 is gameplay factor.
-        //this.zomboRenderer = this.GetComponent<MeshRenderer>();
-        //this.zomboAtk = this.GetComponent<ZomboAttack>();
     }
 
     public void Chase(Transform target)
@@ -55,6 +46,7 @@ public class ZomboMovement : MonoBehaviour
         }
     }
 
+    //ABORTED ON FINAL VERSION
     public void SearchForPlayer()                                                             //Simplified version of SearchFor(Transform target).
     {
         if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(target.position)) < fov / 2)  //Checks if player is within zombo fov...
@@ -73,7 +65,7 @@ public class ZomboMovement : MonoBehaviour
             }
         }
     }
-
+    //ABORTED ON FINAL VERSION
     public void Wander()
     {
         if (Vector3.Distance(this.transform.position, wanderPoint) < 3.0f)
@@ -85,7 +77,7 @@ public class ZomboMovement : MonoBehaviour
             agent.SetDestination(wanderPoint);
         }
     }
-
+    //ABORTED ON FINAL VERSION
     public Vector3 RandomWanderPoint() //TODO: optimization.
     {
         Vector3 randomPoint = (Random.insideUnitSphere * wanderRadius) + transform.position; //Creates a random point in wanderRadius
@@ -101,11 +93,9 @@ public class ZomboMovement : MonoBehaviour
      * The following methods are called from AI Manager to check AI status.
      */
 
-    public void OnAware()          //This can and will also be handled by AI Manager in later version.
+    public void OnAware()          //OnAware used to improve Agent Speed as well.
     {
         isAware = true;
-        this.GetComponent<NavMeshAgent>().speed = 4.0f;
-        //this.agent.speed = 4.0f;
     }
     public bool AwareOrNot()
     {

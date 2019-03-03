@@ -10,6 +10,7 @@ public class ZomboHealth : MonoBehaviour
     private float zomboHealth = 100;
 
     private bool roidRage = false; //roidRage = berserk
+    private bool ableToTakeDamage = true;
 
     //TODO: add different types of zomboHealth/reaction
 
@@ -33,60 +34,61 @@ public class ZomboHealth : MonoBehaviour
     }
 
     public void ApplyDamage(float amount, int bodyPart) //TODO: add gunType (1 for AR, 2 for pistol and so on).
-    {                                                    //FUTURE TODO: add player ID for multiplayer.
-        if (!roidRage) //first hit awakes the zombie
+    {
+        if (ableToTakeDamage) //This is here to make sure Die is called 1 time per zombo.
         {
-            zomboHealth -= amount * bodyPart; //2x Headshot damage 1x Normal damage
-
-            zomboMov.OnAware();
-            roidRage = true;
-
-            if (zomboHealth <= 0)
+            if (!roidRage) //first hit awakes the zombie
             {
-                zomboHealth = 0;
-                Die(bodyPart);
+                zomboHealth -= amount * bodyPart; //2x Headshot damage 1x Normal damage
+
+                zomboMov.OnAware();
+                roidRage = true;
+
+                if (zomboHealth <= 0)
+                {
+                    zomboHealth = 0;
+                    Die(bodyPart);
+                    ableToTakeDamage = false;
+                }
+            }
+            else
+            {
+                zomboHealth -= amount * bodyPart;//2x Headshot damage 1x Normal damage
+
+                zomboMov.OnAware();
+
+                if (zomboHealth <= 0)
+                {
+                    zomboHealth = 0;
+                    Die(bodyPart);
+                    ableToTakeDamage = false;
+                }
+                else if (zomboHealth <= 50) //ROID RAGE BOIS
+                {
+                    navAgent.acceleration = 10.0f;  //TODO: TESTS 
+                    navAgent.speed = 6.0f;
+                    int i = 2;
+                    zomboAtk.MultiplyZomboAtkSpeed(i);
+                }
             }
         }
-        else
-        {
-            zomboHealth -= amount * bodyPart;//2x Headshot damage 1x Normal damage
-
-            zomboMov.OnAware();
-
-            if (zomboHealth <= 0)
-            {
-                zomboHealth = 0;
-                Die(bodyPart);
-            }
-            else if (zomboHealth <= 50) //ROID RAGE BOIS
-            {
-                navAgent.acceleration = 10.0f;  //TODO: TESTS 
-                navAgent.speed = 4.0f;
-                int i = 2;
-                zomboAtk.MultiplyZomboAtkSpeed(i);
-            }
-        }
-        //if (bodyPart == 2)
-        //{
-        //    UI_Manager.Headshot();
-        //}
     }
 
+    public void SetZomboHealth(int amount) //CALLED ONLY FROM AI MANAGER
+    {
+        this.zomboHealth = amount;
+    }
+    public void AI_ManagerTerminator()
+    {
+        Die(2);
+    }
     private void Die(int bodyPart)
     {
         var id = this.zomboMov.GetID();
 
         aiManager.ZomboDeath(bodyPart, id);
 
-        Destroy(gameObject); //TODO:Remove/replace when animation is in.
+        gameObject.GetComponent<Animator>().SetBool("IsDying", true);
+        Destroy(gameObject, 5f);
     }
-
-    //private void OnDestroy()
-    //{
-    //    //aimanager -1
-    //}
-    //private void HealthRegen()
-    //{
-    //    MAYBE ?
-    //}
 }
