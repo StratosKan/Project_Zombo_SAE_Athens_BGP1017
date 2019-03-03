@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-//v1
-public class UI_Manager : MonoBehaviour,GameEventListener
+//v2
+public class UI_Manager : MonoBehaviour
 {
     Text locationText;
     Slider healthSlider;
@@ -11,6 +11,12 @@ public class UI_Manager : MonoBehaviour,GameEventListener
     Text BulletsInMagText;
     Text KillsText;
     Text HeadshotsText;
+
+    Text waveText;
+    private bool showWave;
+    private int currentWave;
+    private float waveTimer = 8.0f;
+    Text zombosAliveText;
 
     private string currentGameState;
     private int UI_Health;
@@ -26,8 +32,6 @@ public class UI_Manager : MonoBehaviour,GameEventListener
 
     public void Start()
     {
-        GameManager.GetGameManager().AddGameEventListener(this);
-
         this.statsManager = this.GetComponent<Stats_Manager>();
 
         if (statsManager != null)
@@ -57,6 +61,9 @@ public class UI_Manager : MonoBehaviour,GameEventListener
         this.KillsText.text = Kills.ToString();
         this.HeadshotsText = GameObject.Find("HeadshotsText").GetComponent<Text>();
         this.HeadshotsText.text = Headshots.ToString();
+
+        this.waveText = GameObject.Find("WaveText").GetComponent<Text>();
+        this.zombosAliveText = GameObject.Find("ZombosAliveText").GetComponent<Text>();
     }
     public void UI_Update_Health(int newPlayerHealth)
     {
@@ -104,6 +111,15 @@ public class UI_Manager : MonoBehaviour,GameEventListener
         }
        
     }
+    public void UI_Update_Wave(int wave)
+    {
+        showWave = true;
+        currentWave = wave;
+    }
+    public void UI_Update_Zombos_Alive(int zombosAlive)
+    {
+       zombosAliveText.text = "ZOMBOS ALIVE: " + zombosAlive;
+    }
 
     private void Update()
     {
@@ -111,6 +127,24 @@ public class UI_Manager : MonoBehaviour,GameEventListener
         UpdateScoreInUI();
         UpdateKillsInUI();
         UpdateHeadshotsInUI();
+
+        if (showWave)
+        {
+            waveTimer -= Time.deltaTime;
+            waveText.text = "WAVE " + currentWave;
+
+            if (waveTimer <= 3.0f)
+            {
+                waveText.text = "";
+                waveText.CrossFadeAlpha(1f,0,true);
+                waveTimer = 8.0f;
+                showWave = false;                
+            }
+            else if(waveTimer <= 7.0f && waveTimer >= 5.5f)
+            {
+                waveText.CrossFadeAlpha(0f,0.9f,true);
+            }
+        }
     }
 
     public void UpdateInteractionInUI(bool shouldShow)
@@ -153,45 +187,5 @@ public class UI_Manager : MonoBehaviour,GameEventListener
             this.currentGameState = newGameState;
             this.locationText.text = currentGameState;
         }
-    }
-
-    public void OnNewGame()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnCollegeArea()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnParking()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnSecondFloor()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnSecretLab()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnSecretLabTwo()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnPlayerDeath()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnEndlessArcaneMode()
-    {
-        throw new System.NotImplementedException();
     }
 }

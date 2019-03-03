@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\Stratos\GameManager.cs" />
     <Compile Include="Assets\Scripts\Stratos\IInteractable.cs" />
     <Compile Include="Assets\Scripts\Stratos\InteractWith.cs" />
+    <Compile Include="Assets\Scripts\Stratos\OurSingletonFriend.cs" />
     <Compile Include="Assets\Scripts\Stratos\PlayerHealth.cs" />
     <Compile Include="Assets\Scripts\Stratos\PlayerInteractSensor.cs" />
     <Compile Include="Assets\Scripts\Stratos\Stats_Manager.cs" />

@@ -23,8 +23,8 @@ public class TriggerEnterEvent : MonoBehaviour
         if (other.CompareTag(playerTag))
         {
             gameManager.ChangeGameState(changeGameStateToThis);
-            gameManager.ChangeObjectiveDisplay(changeObjectiveTextToThis);
 
+            //gameManager.ChangeObjectiveDisplay(changeObjectiveTextToThis);
             //playAudioGuidanceXClip();
 
             exitCollider.gameObject.SetActive(true);

@@ -20,51 +20,41 @@ public class Stats_Manager : MonoBehaviour
     public int BulletsInMag=30;  //Bullets currently in Magazine
 
     private string currentGameState = "Street"; // TODO: name them and make game state manager.
-    private string currentSceneName = "Scene01"; //TODO: getActiveSceneName on awake (if scene01 gamestate=street if scene02 gamestate=secretLab)!
+
+    //private string currentSceneName = "Scene01"; //TODO: getActiveSceneName on awake (if scene01 gamestate=street if scene02 gamestate=secretLab)!
     //private string currentAIState;
 
     private bool tutorialEnabled; //TODO: make tutorial?
     private int tutorialProgress;
 
-    private float updateTimer = 2.0f; // Stats is updating every 2 secs 
+    //private float updateTimer = 2.0f; // Stats is updating every 2 secs 
 
     private int zombosAlive;
     private int zombosKilledInSession;
     private int zombosKilledTotal; //only on stats for save file or scene load.
     private int zombosKilledWithHeadshot;
-
-    private AI_Manager aiManager;
+    
     private UI_Manager uiManager;
-
-    //private string dummyString;
-
+    
     void Start ()
     {
-        this.aiManager = this.GetComponent<AI_Manager>(); //Do this for other managers as well.
         this.uiManager = this.GetComponent<UI_Manager>();
     }
-
-	//void Update () //UPDATE CAN BE REMOVED IN FUTURE VERSION.
- //   {
- //       updateTimer -= Time.deltaTime;
-
- //       if (updateTimer <= 0)
- //       {
- //           aiManager.StatsUpdate(); //Stats Update is a function on all manager script that returns the most useful information.
-
- //           updateTimer = 2.0f; //frequency will change on future update. Required optimization.
- //       }
-	//}
-
-    //TODO: When making save file make sure save is loaded before this method!!!!! SOS
+    public void SetWave(int wave)
+    {
+        uiManager.UI_Update_Wave(wave);
+        Debug.Log("Setting UI wave to: " + wave);
+    }
+    
     public void AI_Update(                                                           
         int zombosAlive,int zombosKilledInSession,int zombosKilledWithHeadshot
         )
     {
-        //TODO: Maybe add previousZombosAlive to compare updates.
         this.zombosAlive = zombosAlive;
         this.zombosKilledInSession = zombosKilledInSession;
         this.zombosKilledWithHeadshot = zombosKilledWithHeadshot;
+
+        uiManager.UI_Update_Zombos_Alive(this.zombosAlive);
     }
     public int GetPlayerHealth()
     {
@@ -136,10 +126,6 @@ public class Stats_Manager : MonoBehaviour
     public string GetGameState()
     {
         return currentGameState;
-    }
-    public string GetSceneName()
-    {
-        return currentSceneName;
     }
     public void ChangeGameState(string newState)
     {

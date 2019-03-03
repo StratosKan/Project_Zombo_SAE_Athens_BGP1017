@@ -74,6 +74,10 @@ public class ZomboHealth : MonoBehaviour
         }
     }
 
+    public void SetZomboHealth(int amount) //CALLED ONLY FROM AI MANAGER
+    {
+        this.zomboHealth = amount;
+    }
     public void AI_ManagerTerminator()
     {
         Die(2);

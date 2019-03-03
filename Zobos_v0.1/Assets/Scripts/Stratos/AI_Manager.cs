@@ -2,33 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine.AI;
 
-//v3
+//v4(final)
 [RequireComponent(typeof(Stats_Manager))]
 
 public class AI_Manager : MonoBehaviour
 {
     private int currentWave = 0; //TODODOODODO
-    private string difficulty = "HARD"; //TOODODODODOD
-    private int MAX_ALLOWED_ZOMBOS = 100;
-
-    public bool onLevelChange; //Need?
+    private bool currentDifficulty = true; //Default set to hard.
+    private int MAX_ALLOWED_ZOMBOS = 40;
 
     public GameObject zomboPrefab;
     public Transform dadOFZombos;
 
-    private GameObject[] activeAgents = new GameObject[100];                  //reference to everything AI related so we can use for our needs.
-    private Vector3[] activeAgentsPositions = new Vector3[100];
+    private GameObject[] activeAgents = new GameObject[331];                  //reference to everything AI related so we can use for our needs.
+    private Vector3[] activeAgentsPositions = new Vector3[331];
 
-    private ZomboAttack[] activeAgentsAtkScripts = new ZomboAttack[100];
-    private ZomboMovement[] activeAgentsMovementScripts = new ZomboMovement[100];
-    private ZomboHealth[] activeAgentsHealthScripts = new ZomboHealth[100];
-    private NavMeshAgent[] activeAgentsNavMesh = new NavMeshAgent[100];
-    private Animator[] activeAgentsAnimator = new Animator[100];
-    private float[] activeAgentsAttackTimer = new float[100];
+    private ZomboAttack[] activeAgentsAtkScripts = new ZomboAttack[331];
+    private ZomboMovement[] activeAgentsMovementScripts = new ZomboMovement[331];
+    private ZomboHealth[] activeAgentsHealthScripts = new ZomboHealth[331];
+    private NavMeshAgent[] activeAgentsNavMesh = new NavMeshAgent[331];
+    private Animator[] activeAgentsAnimator = new Animator[331];
+    private float[] activeAgentsAttackTimer = new float[331];
 
-    private int[] activeAgentsID = new int[100];
-    private bool[] activeAgentsEnabled = new bool[100];
-    //private bool[] activeAgentsAware = new bool[50]; TODODODODODODO
+    private int[] activeAgentsID = new int[331];
+    private bool[] activeAgentsEnabled = new bool[331];
     
     private int zombosSpawned = 0; //This serves as a counter and an ID for zombos.
     private int zombosAlive = 0;
@@ -45,8 +42,10 @@ public class AI_Manager : MonoBehaviour
     public int howManyToSpawnOnStart;
     public float zomboRespawnTimer;  //TODO: MAKE THIS AN OPTION AND/OR MAKE THIS WORK IN 
     private float defaultZomboRespawnTimer;
+    private bool wavePlaying = false;
 
-    private Stats_Manager stats_manager; //private test
+    private Stats_Manager stats_manager;
+    private GameManager gameManager;
 
     private string playerTag = "Player";
     private Transform target;
@@ -60,6 +59,7 @@ public class AI_Manager : MonoBehaviour
 
         //TODO: GET GAME STATE!
 
+        this.gameManager = this.GetComponent<GameManager>();
         this.stats_manager = this.GetComponent<Stats_Manager>();
 
         if (target == null && GameObject.FindGameObjectWithTag(playerTag))
@@ -99,7 +99,7 @@ public class AI_Manager : MonoBehaviour
                     if (activeAgentsMovementScripts[ai].AwareOrNot()) //final version: ALL ZOMBOS AWARE MAYBE REMOVE
                     {
                         activeAgentsMovementScripts[ai].Chase(target);
-                        Debug.Log(activeAgentsID[ai] + " Chasing player");
+                        //Debug.Log(activeAgentsID[ai] + " Chasing player");
 
                         activeAgentsAttackTimer[ai] -= Time.deltaTime;
 
@@ -157,19 +157,32 @@ public class AI_Manager : MonoBehaviour
                 zomboRespawnTimer = defaultZomboRespawnTimer;
             }
         }
+        if (wavePlaying)
+        {
+            if (zombosAlive <= 0)
+            {
+                WaveFinished();
+                wavePlaying = false;
+            }
+        }
     }
-    public void SpawnNextWave() //ONLY CALLED FROM GAME_MANAGER
+    public void SpawnNextWave(bool difficulty) //ONLY CALLED FROM GAME_MANAGER
     {
-        currentWave++; 
-        //0) TERMINATE ACTIVE AGENTS
-        //1) GET PLAYER LOCATION
-        //2) GET NEARBY-DESIRED SPAWNPOINTS
-        //3) COUNT THE CHILDREN
-        //4) MASSIVE ZOMBO SPAWN
-        //5) UPDATE UI_MANAGER
+        wavePlaying = false;
+
+        currentWave++;
+        TerminateActiveAgents();
+
+        int spawnFormula = 6 + currentWave; // max 120 + 210 = 330
+        MassiveZomboRandomSpawn(spawnFormula);
+
+        wavePlaying = true;
+        StatsUpdate();
+        Debug.Log("SPAWNING WAVE " + currentWave);
     }
     public void WaveFinished()
     {
+        gameManager.NextWave();
         //UPDATE UI_MANAGER
         //GameManager wave finished awaiting orders
     }
@@ -248,18 +261,37 @@ public class AI_Manager : MonoBehaviour
         activeAgentsID[zombosSpawned] = zombosSpawned; //Assigning ID
         activeAgentsEnabled[zombosSpawned] = true; //Toggled off from ZomboDeath().        
         activeAgentsMovementScripts[zombosSpawned].ChangeMyID(zombosSpawned); //ID is on zombo as well
+
+        if (currentDifficulty) //MEANS WE ARE ON HARD DIFFICULTY
+        {
+            int atkDifficultyFormula = 4 + currentWave;
+            activeAgentsAtkScripts[zombosSpawned].SetZomboAtkDmg(atkDifficultyFormula);
+
+            int healthDifficultyFormula = 95 + currentWave * 5;
+            activeAgentsHealthScripts[zombosSpawned].SetZomboHealth(healthDifficultyFormula);
+        }
     }
 
-    public void TerminateActiveAgents() //TODOODODO
+    public void TerminateActiveAgents() 
     {
         foreach(int ai in activeAgentsID)
         {
-            activeAgentsHealthScripts[ai].AI_ManagerTerminator(); //bye komrade, u failed xD 
+            if (activeAgentsEnabled[ai])
+            {
+                activeAgentsHealthScripts[ai].AI_ManagerTerminator(); //bye komrade, u failed xD 
+            }
         }
     }
     public void TerminateSingleAgent(int id)
     {
-        activeAgentsHealthScripts[id].AI_ManagerTerminator();
+        if (activeAgentsEnabled[id])
+        {
+            activeAgentsHealthScripts[id].AI_ManagerTerminator();
+        }
+    }
+    public void SetDifficulty(bool diff)
+    {
+        this.currentDifficulty = diff;
     }
 
     public void ZomboDeath(int bodyPart, int zomboID) //1 for anything , 2 for headshot
