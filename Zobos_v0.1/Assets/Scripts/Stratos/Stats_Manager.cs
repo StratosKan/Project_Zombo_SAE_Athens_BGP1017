@@ -16,8 +16,8 @@ public class Stats_Manager : MonoBehaviour
 
     private int weaponType;         //weapon currently equipped
     private int inventoryGrenadesCount; //How many? TODO: grenade types if any
-    private int MagazineSize=30;  //Magazine Size
-    public int BulletsInMag=30;  //Bullets currently in Magazine
+    private int MagazineSize = 30;  //Magazine Size
+    public int BulletsInMag = 30;  //Bullets currently in Magazine
 
     private string currentGameState = "Street"; // TODO: name them and make game state manager.
 
@@ -33,10 +33,10 @@ public class Stats_Manager : MonoBehaviour
     private int zombosKilledInSession;
     private int zombosKilledTotal; //only on stats for save file or scene load.
     private int zombosKilledWithHeadshot;
-    
+
     private UI_Manager uiManager;
-    
-    void Start ()
+
+    void Start()
     {
         this.uiManager = this.GetComponent<UI_Manager>();
     }
@@ -45,9 +45,9 @@ public class Stats_Manager : MonoBehaviour
         uiManager.UI_Update_Wave(wave);
         Debug.Log("Setting UI wave to: " + wave);
     }
-    
-    public void AI_Update(                                                           
-        int zombosAlive,int zombosKilledInSession,int zombosKilledWithHeadshot
+
+    public void AI_Update(
+        int zombosAlive, int zombosKilledInSession, int zombosKilledWithHeadshot
         )
     {
         this.zombosAlive = zombosAlive;
@@ -84,7 +84,7 @@ public class Stats_Manager : MonoBehaviour
     public void SetPlayerStamina(float newPlayerStamina)
     {
         this.playerStamina = newPlayerStamina;
-        uiManager.UI_Update_Stamina(playerStamina);        
+        uiManager.UI_Update_Stamina(playerStamina);
     }
 
     public int GetKills()
@@ -102,9 +102,19 @@ public class Stats_Manager : MonoBehaviour
         return MagazineSize;
     }
 
+    public void SetMagSize(int magSize)
+    {
+        MagazineSize = magSize;
+    }
+
     public int GetBulletsInMag()
     {
         return BulletsInMag;
+    }
+
+    public void SetBullets(int bulletsInGun)
+    {
+        this.BulletsInMag = bulletsInGun;
     }
 
     public void SetBulletsInMag()

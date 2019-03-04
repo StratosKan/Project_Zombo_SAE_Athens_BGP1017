@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class GunScript : MonoBehaviour
 {
-    // In this script I try to have each Gun have each own properties, !(if not merged with shooting - merge ShootingScript)!
+    // In this script I try to have each Gun have each own properties,
     // Input, Player and MainCamera are referenced by tags!
 
     private float targetXRotation;
@@ -34,6 +35,11 @@ public class GunScript : MonoBehaviour
 
     [Header("Shooting Properties")]
     public int bulletsToFire = 1; //Increase for shotguns/flamethrower
+    public int maxBulletsInGun = 30;
+    private int bulletsInGun = 30;
+    public float reloadTime = 1f;
+    [HideInInspector]
+    public bool isReloading = false;
     public float maximumBulletRange = Mathf.Infinity;
     public float rateOfFirePerSecond = 1f;
     private float nextTimeToFire;
@@ -51,9 +57,10 @@ public class GunScript : MonoBehaviour
     public float hitVFXToDestroyTime = 0.1f;
 
     [Header("SFX Properties")]
+    public AudioClip reloadSound;
     public AudioClip fireSFX;
-    private AudioSource fireSFXsource; //  Jimmo i put these on comments in case you or someone else need them, the whole SFX section is gonna be through
-    public AudioClip hitSFX;           //   the sound manager....hopefully.
+    private AudioSource fireSFXsource; 
+    public AudioClip hitSFX;
     public GameObject hitSFXPrefab;
     private AudioSource hitsSFXsource;
     public float hitSFXToDestroyTime = 1f;
@@ -63,6 +70,7 @@ public class GunScript : MonoBehaviour
     private GameObject cameraObject;
     private RaycastHit hit;
     private InteractiveTargetScript target = null;
+    private Stats_Manager stats = null;
 
     #region Experimental Options this is handled by GunDrawerScript
     [SerializeField]
@@ -85,6 +93,7 @@ public class GunScript : MonoBehaviour
     private float cameraCenterRotationSpeedVelocity;
     #endregion
 
+    
     void Start()
     {
         if (enableExperimentalOptions)
@@ -92,21 +101,27 @@ public class GunScript : MonoBehaviour
             defaultGunPosition = gunDepth;
         }
 
-        //fireSFXObject = GetComponent<AudioSource>();
         input = GameObject.FindGameObjectWithTag("Manager").GetComponent<InputManager>();
+        stats = GameObject.FindGameObjectWithTag("Manager").GetComponent<Stats_Manager>();
         playerObject = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        fireSFXsource = GameObject.FindGameObjectWithTag("Gun").GetComponent<AudioSource>();
+        fireSFXsource = GetComponent<AudioSource>();
         cameraObject = Camera.main.gameObject;
         cameraObject.GetComponent<CameraLookScript>().currentTargetCameraAngle = zoomAngle;
         cameraObject.GetComponent<CameraLookScript>().zoomLatency = zoomLatency;
 
         targetYRotation = playerObject.transform.rotation.eulerAngles.y;
+        bulletsInGun = maxBulletsInGun;
+        stats.SetBullets(bulletsInGun);
 
         if (useMainCamera)
         {
             shootingVector = Camera.main.transform;
         }
+
+        bulletsInGun = maxBulletsInGun;
+
     }
+
 
     void LateUpdate()
     {
@@ -114,6 +129,11 @@ public class GunScript : MonoBehaviour
 
         GunPositionalData();
 
+        if (input.Reload)
+        {
+            StartCoroutine(Reload());
+        }
+        stats.SetBullets(bulletsInGun);
     }
 
     void FixedUpdate()
@@ -123,6 +143,19 @@ public class GunScript : MonoBehaviour
         {
             ExperimentalGunMovement();
         }
+    }
+
+    IEnumerator Reload()
+    {
+        shouldFire = false;
+        isReloading = true;
+        fireSFXsource.PlayOneShot(reloadSound);
+
+        yield return new WaitForSeconds(reloadTime);
+
+        shouldFire = true;
+        isReloading = false;
+        bulletsInGun = maxBulletsInGun;
     }
 
     //Primary Methods
@@ -146,40 +179,50 @@ public class GunScript : MonoBehaviour
             }
         }
 
-        if (shouldFire)
+        if (bulletsInGun <= maxBulletsInGun && bulletsInGun > 0 && !isReloading)
         {
-            tracerEffect.Play();
-            targetXRotation += (Random.value - 0.5f) * Mathf.Lerp(spreadAimed, spreadNotAimed, ratioHipHold * .3f); // Controls spread up/down
-            targetYRotation += (Random.value - 0.5f) * Mathf.Lerp(spreadAimed, spreadNotAimed, ratioHipHold * .3f); // Controls spread left/right
-            currentRecoilZPos -= recoilAmount;
-            for (int i = 0; i < bulletsToFire; i++) //For multiple shot per click increase bulletsToFire
+            if (shouldFire)
             {
-                if (Physics.Raycast(shootingVector.position, shootingVector.forward, out hit, maximumBulletRange, 9)) // Layer 9 is player layer
+              
+                tracerEffect.Play();
+                bulletsInGun--;
+                targetXRotation += (Random.value - 0.5f) * Mathf.Lerp(spreadAimed, spreadNotAimed, ratioHipHold * .3f); // Controls spread up/down
+                targetYRotation += (Random.value - 0.5f) * Mathf.Lerp(spreadAimed, spreadNotAimed, ratioHipHold * .3f); // Controls spread left/right
+                currentRecoilZPos -= recoilAmount;
+                for (int i = 0; i < bulletsToFire; i++) //For multiple shot per click increase bulletsToFire
                 {
-                    // Handles Bullet Spread
-                    shootingVector.rotation = CalculateBulletSpread(spreadAimed);
-                    // Handles Damage
-                    Damage(hit);
-                    // Handles VFX
-                    CreateVFX(hit);
+                    if (Physics.Raycast(shootingVector.position, shootingVector.forward, out hit, maximumBulletRange, 9)) // Layer 9 is player layer
+                    {
+                        // Handles Bullet Spread
+                        shootingVector.rotation = CalculateBulletSpread(spreadAimed);
+                        // Handles Damage
+                        Damage(hit);
+                        // Handles VFX
+                        CreateVFX(hit);
+                    }
+
+                    //SoundManager.instance.PlayShoot(fireSFX, fireSFXsource); // If the fire rate is too high sound might glitch out
                 }
 
-                //SoundManager.instance.PlayShoot(fireSFX, fireSFXsource); // If the fire rate is too high sound might glitch out
-            }
+                // Handles SFX
+                SoundManager.instance.PlayShoot(fireSFX, fireSFXsource);
+                if (hit.collider)
+                {
+                    GameObject instantiatedAudioSource = Instantiate(hitSFXPrefab, hit.point, Quaternion.identity);
+                    instantiatedAudioSource.transform.SetParent(hit.transform, true);
+                    hitsSFXsource = instantiatedAudioSource.GetComponent<AudioSource>();
 
-            // Handles SFX
-            SoundManager.instance.PlayShoot(fireSFX, fireSFXsource);
-            if (hit.collider)
-            {
-                GameObject instantiatedAudioSource = Instantiate(hitSFXPrefab, hit.point, Quaternion.identity);
-                instantiatedAudioSource.transform.SetParent(hit.transform, true);
-                hitsSFXsource = instantiatedAudioSource.GetComponent<AudioSource>();
+                    SoundManager.instance.PlayHit(hitSFX, hitsSFXsource);
+                    Destroy(instantiatedAudioSource, hitSFXToDestroyTime);
+                }
 
-                SoundManager.instance.PlayHit(hitSFX, hitsSFXsource);
-                Destroy(instantiatedAudioSource, hitSFXToDestroyTime);
+                if (bulletsInGun <= 0)
+                {
+                    StartCoroutine(Reload());
+                }
             }
-            //CreateSFX();
         }
+        
     }
 
     private void GunPositionalData()
@@ -254,7 +297,6 @@ public class GunScript : MonoBehaviour
     private void Damage(RaycastHit hit)
     {
         target = hit.transform.GetComponentInParent<InteractiveTargetScript>();
-        //Debug.Log(target.GetHashCode());
         if (target != null)
         {
             target.TakeDamage(gunDamage);
@@ -270,24 +312,4 @@ public class GunScript : MonoBehaviour
             Destroy(instantiatedTexture, hitVFXToDestroyTime);
         }
     }
-    //THIS PART IS FUNCTIONING THROUGH THE SOUND MANAGER 
-    /* private void CreateSFX()
-     {
-         if (fireSFX != null)
-         {
-             fireSFXObject.PlayOneShot(fireSFX);
-         }
-         if (hitSFX != null)
-         {
-             if (hit.collider)
-             {
-                 GameObject instantiatedAudioSource = Instantiate(hitSFXPrefab, hit.point, Quaternion.identity);
-                 instantiatedAudioSource.transform.SetParent(hit.transform, true);
-                 AudioSource audioSrc;
-                 audioSrc = instantiatedAudioSource.GetComponent<AudioSource>();
-                 audioSrc.PlayOneShot(hitSFX);
-                 Destroy(instantiatedAudioSource, hitSFXToDestroyTime);
-             }
-         }
-     } */
 }

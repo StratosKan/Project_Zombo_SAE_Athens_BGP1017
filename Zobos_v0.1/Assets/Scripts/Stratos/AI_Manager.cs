@@ -14,18 +14,18 @@ public class AI_Manager : MonoBehaviour
     public GameObject zomboPrefab;
     public Transform dadOFZombos;
 
-    private GameObject[] activeAgents = new GameObject[331];                  //reference to everything AI related so we can use for our needs.
-    private Vector3[] activeAgentsPositions = new Vector3[331];
+    private GameObject[] activeAgents = new GameObject[350];                  //reference to everything AI related so we can use for our needs.
+    private Vector3[] activeAgentsPositions = new Vector3[350];
 
-    private ZomboAttack[] activeAgentsAtkScripts = new ZomboAttack[331];
-    private ZomboMovement[] activeAgentsMovementScripts = new ZomboMovement[331];
-    private ZomboHealth[] activeAgentsHealthScripts = new ZomboHealth[331];
-    private NavMeshAgent[] activeAgentsNavMesh = new NavMeshAgent[331];
-    private Animator[] activeAgentsAnimator = new Animator[331];
-    private float[] activeAgentsAttackTimer = new float[331];
+    private ZomboAttack[] activeAgentsAtkScripts = new ZomboAttack[350];
+    private ZomboMovement[] activeAgentsMovementScripts = new ZomboMovement[350];
+    private ZomboHealth[] activeAgentsHealthScripts = new ZomboHealth[350];
+    private NavMeshAgent[] activeAgentsNavMesh = new NavMeshAgent[350];
+    private Animator[] activeAgentsAnimator = new Animator[350];
+    private float[] activeAgentsAttackTimer = new float[350];
 
-    private int[] activeAgentsID = new int[331];
-    private bool[] activeAgentsEnabled = new bool[331];
+    private int[] activeAgentsID = new int[350];
+    private bool[] activeAgentsEnabled = new bool[350];
     
     private int zombosSpawned = 0; //This serves as a counter and an ID for zombos.
     private int zombosAlive = 0;
@@ -129,7 +129,7 @@ public class AI_Manager : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log("We are here!");
+                            //Debug.Log("We are here!");
                             //Anim
                             activeAgentsAnimator[ai].SetBool("IsAttacking", false);
 

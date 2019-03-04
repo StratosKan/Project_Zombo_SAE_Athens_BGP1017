@@ -7,7 +7,8 @@ public class SoundManager : MonoBehaviour //Interface usage will come soon
     private AudioSource HitSFX;
     public AudioClip WalkSound;
     public AudioClip JumpSound;
-    
+    public AudioClip MainGameMusic;
+
     public AudioSource Music; //this will remain blank for a while
 
     public static SoundManager instance = null;
@@ -21,6 +22,14 @@ public class SoundManager : MonoBehaviour //Interface usage will come soon
         }       
 
         //DontDestroyOnLoad(gameObject); // Thats to secure that it's not gonna be destoyed at everytime we reload the scene
+    }
+
+    private void Start()
+    {
+        Music = GetComponent<AudioSource>();
+        Music.clip = MainGameMusic;
+        Music.Play();
+        Music.playOnAwake = true;
     }
 
     public void PlayShoot (AudioClip clip, AudioSource source)
@@ -39,11 +48,11 @@ public class SoundManager : MonoBehaviour //Interface usage will come soon
     
     public void WalkPitchRange(AudioSource source)
     {
-        source.pitch = Random.Range(0.8f, 1.1f);
+        source.pitch = Random.Range(0.8f, 1f);
     }
     public void RunningMode(AudioSource source)
     {
-        source.pitch = 1.5f;
+        source.pitch = 1.1f;
     }
     
 }

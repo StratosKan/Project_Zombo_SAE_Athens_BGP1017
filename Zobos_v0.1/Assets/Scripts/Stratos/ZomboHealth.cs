@@ -87,7 +87,7 @@ public class ZomboHealth : MonoBehaviour
         var id = this.zomboMov.GetID();
 
         aiManager.ZomboDeath(bodyPart, id);
-
+        navAgent.isStopped = true;
         gameObject.GetComponent<Animator>().SetBool("IsDying", true);
         Destroy(gameObject, 5f);
     }

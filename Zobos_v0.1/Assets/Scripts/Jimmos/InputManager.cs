@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
     public bool Jump { get; private set; }
     public bool StimpackUse { get; private set; }
     public bool Interaction { get; private set; }
+    public bool Reload { get; private set; }
 
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
@@ -19,15 +20,22 @@ public class InputManager : MonoBehaviour
     public bool MouseFireHold { get; private set; }
     public bool MouseAimDown { get; private set; }
     public bool MouseAimHold { get; private set; }
+    public Vector2 MouseScrollDelta { get; private set; }
+    public bool KeyOne { get; private set; }
+    public bool KeyTwo { get; private set; }
+    public bool KeyThree { get; private set; }
+
 
     public Canvas pausemenuUI;
     public Canvas statsUI;
     public static bool GameIsPaused = false;
-
+    public AudioSource SoundManager;
     //This guy controls all, also should probably make these an enumerator and use switch/case
 
     private void Awake()
     {
+        SoundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<AudioSource>();
+
         Resume();
     }
 
@@ -42,8 +50,13 @@ public class InputManager : MonoBehaviour
             IsRunning = Input.GetKey(KeyCode.LeftShift);
             StimpackUse = Input.GetKey(KeyCode.X);
             Interaction = Input.GetKey(KeyCode.E);
-            
+            Reload = Input.GetKeyDown(KeyCode.R);
 
+            KeyOne = Input.GetKeyDown(KeyCode.Alpha1);
+            KeyTwo = Input.GetKeyDown(KeyCode.Alpha2);
+            KeyThree = Input.GetKeyDown(KeyCode.Alpha3);
+
+            MouseScrollDelta = Input.mouseScrollDelta;
             MouseX = Input.GetAxis("Mouse X");
             MouseY = Input.GetAxis("Mouse Y");
             MouseFireDown = Input.GetMouseButtonDown(0);
@@ -83,6 +96,7 @@ public class InputManager : MonoBehaviour
 
     public void Resume()
     {
+        SoundManager.UnPause();
         Time.timeScale = 1;
         pausemenuUI.enabled = false;
         GameIsPaused = false;
@@ -97,6 +111,7 @@ public class InputManager : MonoBehaviour
         GameIsPaused = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        SoundManager.Pause();
     }
 
     void DisplayUsefulStats()
