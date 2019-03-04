@@ -43,7 +43,7 @@ public class Stats_Manager : MonoBehaviour
     public void SetWave(int wave)
     {
         uiManager.UI_Update_Wave(wave);
-        Debug.Log("Setting UI wave to: " + wave);
+        //Debug.Log("Setting UI wave to: " + wave);
     }
 
     public void AI_Update(

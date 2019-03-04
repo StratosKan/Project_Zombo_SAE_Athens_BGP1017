@@ -22,6 +22,7 @@ public class AI_Manager : MonoBehaviour
     private ZomboHealth[] activeAgentsHealthScripts = new ZomboHealth[350];
     private NavMeshAgent[] activeAgentsNavMesh = new NavMeshAgent[350];
     private Animator[] activeAgentsAnimator = new Animator[350];
+    private AudioSource[] activeAgentsAudiosource = new AudioSource[350];
     private float[] activeAgentsAttackTimer = new float[350];
 
     private int[] activeAgentsID = new int[350];
@@ -119,7 +120,9 @@ public class AI_Manager : MonoBehaviour
 
                                 activeAgentsAnimator[ai].SetBool("IsAttacking", true);
                                 //Anim
-
+                                //Audio
+                                activeAgentsAudiosource[ai].Play();
+                                //Audio
                                 activeAgentsAtkScripts[ai].Attack(target);
 
                                 activeAgentsAttackTimer[ai] = defaultZomboAttackTimer;
@@ -178,7 +181,7 @@ public class AI_Manager : MonoBehaviour
 
         wavePlaying = true;
         StatsUpdate();
-        Debug.Log("SPAWNING WAVE " + currentWave);
+        //Debug.Log("SPAWNING WAVE " + currentWave);
     }
     public void WaveFinished()
     {
@@ -256,6 +259,7 @@ public class AI_Manager : MonoBehaviour
         activeAgentsMovementScripts[zombosSpawned] = zombo.GetComponent<ZomboMovement>();
         activeAgentsNavMesh[zombosSpawned] = zombo.GetComponent<NavMeshAgent>();
         activeAgentsAnimator[zombosSpawned] = zombo.GetComponent<Animator>();
+        activeAgentsAudiosource[zombosSpawned] = zombo.GetComponent<AudioSource>();
         activeAgentsAttackTimer[zombosSpawned] = defaultZomboAttackTimer;
 
         activeAgentsID[zombosSpawned] = zombosSpawned; //Assigning ID
@@ -266,6 +270,7 @@ public class AI_Manager : MonoBehaviour
         {
             int atkDifficultyFormula = 4 + currentWave;
             activeAgentsAtkScripts[zombosSpawned].SetZomboAtkDmg(atkDifficultyFormula);
+            //Debug.Log(activeAgentsAtkScripts[zombosSpawned].GetZomboAtkDmg());
 
             int healthDifficultyFormula = 95 + currentWave * 5;
             activeAgentsHealthScripts[zombosSpawned].SetZomboHealth(healthDifficultyFormula);

@@ -41,7 +41,7 @@ public class UI_Manager : MonoBehaviour
             this.UI_Stamina = statsManager.GetPlayerStamina();
             this.MagCapacity = statsManager.GetMagSize();
             this.BulletsInMag = statsManager.GetBulletsInMag();
-            Debug.Log("UI BUGFIX" + currentGameState +" "+ UI_Stamina +" "+ UI_Health);
+            //Debug.Log("UI BUGFIX" + currentGameState +" "+ UI_Stamina +" "+ UI_Health);
         }
         else
         {
